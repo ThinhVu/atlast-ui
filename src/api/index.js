@@ -59,5 +59,18 @@ export const userAPI = {
       return null;
     }
   },
-  signOut: async () => exec(axios.post(`${API_URL}/user/sign-out`), {}, axiosOpts)
+  signOut: async () => exec(axios.post(`${API_URL}/user/sign-out`), {}, axiosOpts),
+  signUp: async (email, password) => {
+    try {
+      const {data} = await exec(axios.post(`${API_URL}/user/sign-up`, {email, password}))
+      if (data.token) {
+        _saveAuthSession(data);
+      } else {
+        console.error('Token missed!');
+      }
+      return data.token;
+    } catch (e) {
+      console.error(e)
+    }
+  },
 }

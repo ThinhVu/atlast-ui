@@ -8,7 +8,17 @@
         <div class="px-2">Atlast</div>
       </template>
     </TDashboard>
-    <Auth v-else/>
+      <div class="home" v-else>
+          <button
+                  v-for="(buttonText, tab) in tabButtons"
+                  :key="tab"
+                  :class="['tab-button', { active: currentTab === tab}]"
+                  @click="currentTab = tab"
+          >
+              {{ buttonText }}
+          </button>
+          <component :is="tabs[currentTab]" class="tab"></component>
+      </div>
   </TLoading>
 </template>
 <script setup lang="ts">
@@ -17,6 +27,9 @@ import {userAPI} from '@/api';
 import {user} from '@/app-state';
 import {socketConnect} from '@/socket/socket';
 import Auth from "../components/Auth.vue";
+//import SignUp
+import SignUp from "../components/SignUp.vue"
+import {ref} from "vue"
 
 const sidebarUser = [
 ]
@@ -44,4 +57,17 @@ onBeforeMount(async () => {
     loading.end(ACTIONS.AUTH)
   }
 })
+
+// create small tab of each component
+const currentTab = ref('Auth')
+
+const tabs = {
+    Auth,
+    SignUp,
+}
+// used for v-for
+const tabButtons = {
+    Auth: 'Sign In',
+    SignUp: 'Sign Up',
+};
 </script>
