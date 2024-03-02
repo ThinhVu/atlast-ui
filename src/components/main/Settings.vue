@@ -24,6 +24,11 @@ const check = ref(true)
 const changePass = async()=> {
     if (confirmPass.value!=='') {
         check.value = nPass.value === confirmPass.value;
+        if (check.value===true) {
+            await userAPI.changePassword({password:nPass.value})
+        } else {
+            console.log("Password doesn't match!")
+        }
     } else {
         check.value = true
     }

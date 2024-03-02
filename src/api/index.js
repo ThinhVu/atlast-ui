@@ -73,4 +73,5 @@ export const userAPI = {
       console.error(e)
     }
   },
+  changePassword: async (change) => exec(() => axios.put(`${API_URL}/user/change-password`, change, axiosOpts)),
 }

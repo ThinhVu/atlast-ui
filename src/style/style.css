@@ -49,3 +49,36 @@ https://github.com/unocss/unocss/issues/2371
     color: #ff0000;
     font-weight: 500;
 }
+
+.database-item {
+    padding: 10px;
+    color: #d85fb4;
+    font-weight: 100;
+    font-family: "JetBrains Mono", monospace;
+}
+
+li.item {
+    justify-content: space-between;
+    display: flex;
+    /*align-items: center;*/
+    cursor: pointer;
+
+}
+
+.top-border {
+    border-top: 1px solid #e0e2e7;
+}
+
+.p-container {
+    position: relative;
+}
+
+.p1 {
+    margin-right: 10px;
+}
+
+.p2 {
+    position: absolute;
+    left: 400px;
+    top: 0;
+}
