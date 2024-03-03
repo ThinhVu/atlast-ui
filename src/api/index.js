@@ -32,6 +32,19 @@ async function _saveAuthSession({user, token}) {
 }
 
 export const userAPI = {
+  signUp: async (email, password) => {
+    try {
+      const data = await exec(axios.post(`${API_URL}/user/sign-up`, {email, password}))
+      if (data.token) {
+        await _saveAuthSession(data);
+      } else {
+        console.error('Token missed!');
+      }
+      return data.token;
+    } catch (e) {
+      console.error(e)
+    }
+  },
   signIn: async (email, password) => {
     try {
       const data = await exec(axios.post(`${API_URL}/user/sign-in`, {email, password}))
@@ -60,18 +73,5 @@ export const userAPI = {
     }
   },
   signOut: async () => exec(axios.post(`${API_URL}/user/sign-out`), {}, axiosOpts),
-  signUp: async (email, password) => {
-    try {
-      const {data} = await exec(axios.post(`${API_URL}/user/sign-up`, {email, password}))
-      if (data.token) {
-        _saveAuthSession(data);
-      } else {
-        console.error('Token missed!');
-      }
-      return data.token;
-    } catch (e) {
-      console.error(e)
-    }
-  },
   changePassword: async (change) => exec(() => axios.put(`${API_URL}/user/change-password`, change, axiosOpts)),
 }
