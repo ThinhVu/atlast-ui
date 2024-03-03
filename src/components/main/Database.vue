@@ -6,7 +6,9 @@
           <ItemComponent/>
       </ul>
   </div>
+
 </template>
 <script setup>
 import ItemComponent from './database/Item.component.vue'
+
 </script>
