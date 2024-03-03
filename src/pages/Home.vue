@@ -7,18 +7,11 @@
       <template #header>
         <div class="px-2">Atlast</div>
       </template>
+      <template #sidebar-footer>
+        <t-btn @click="userAPI.signOut">Sign out</t-btn>
+      </template>
     </TDashboard>
-      <div class="home" v-else>
-          <button
-                  v-for="(buttonText, tab) in tabButtons"
-                  :key="tab"
-                  :class="['tab-button', { active: currentTab === tab}]"
-                  @click="currentTab = tab"
-          >
-              {{ buttonText }}
-          </button>
-          <component :is="tabs[currentTab]" class="tab"></component>
-      </div>
+    <Auth v-else/>
   </TLoading>
 </template>
 <script setup lang="ts">
@@ -26,16 +19,17 @@ import {inject, computed, onBeforeMount} from 'vue';
 import {userAPI} from '@/api';
 import {user} from '@/app-state';
 import {socketConnect} from '@/socket/socket';
+import Database from "../components/Database.vue";
+import Billing from "../components/Billing.vue";
+import Setting from "../components/Setting.vue";
 import Auth from "../components/Auth.vue";
-//import SignUp
-import SignUp from "../components/SignUp.vue"
-import {ref} from "vue"
-
-const sidebarUser = [
-]
 
 const sidebarItems = computed(() => {
-  return sidebarUser
+  return [
+    {title: 'Database', icon: 'fas fa-bar-chart@20px:#aaa', component: Database},
+    {title: 'Billing', icon: 'fas fa-key@20px:#aaa', component: Billing},
+    {title: 'Setting', icon: 'fas fa-folder@20px:#aaa', component: Setting}
+  ]
 })
 
 const {loading, notification} = inject('TSystem')
@@ -57,17 +51,4 @@ onBeforeMount(async () => {
     loading.end(ACTIONS.AUTH)
   }
 })
-
-// create small tab of each component
-const currentTab = ref('Auth')
-
-const tabs = {
-    Auth,
-    SignUp,
-}
-// used for v-for
-const tabButtons = {
-    Auth: 'Sign In',
-    SignUp: 'Sign Up',
-};
 </script>

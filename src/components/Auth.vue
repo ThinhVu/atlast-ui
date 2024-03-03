@@ -5,6 +5,7 @@
       <p><t-text v-model="email" class="w-100" label="Email" placeholder="enter your email"/></p>
       <p><t-password v-model="password" class="w-100" label="Password"/></p>
       <div class="fr ai-c jc-fe fg-4px">
+        <t-btn save @click="signUp">Sign Up</t-btn>
         <t-btn primary @click="signIn">Sign In</t-btn>
       </div>
     </div>
@@ -22,6 +23,13 @@ const password = ref()
 
 const signIn = async () => {
   const token = await userAPI.signIn(email.value, password.value)
+  if (token) {
+    await router.push({path: '/'})
+  }
+}
+
+const signUp = async () => {
+  const token = await userAPI.signUp(email.value, password.value)
   if (token) {
     await router.push({path: '/'})
   }

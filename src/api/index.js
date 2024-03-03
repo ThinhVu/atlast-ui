@@ -75,3 +75,9 @@ export const userAPI = {
   signOut: async () => exec(axios.post(`${API_URL}/user/sign-out`), {}, axiosOpts),
   changePassword: async (change) => exec(() => axios.put(`${API_URL}/user/change-password`, change, axiosOpts)),
 }
+
+export const dbAPI = {
+  getDbs: async () => exec(axios.get(`${API_URL}/database`, axiosOpts)),
+  createDb: async () => exec(axios.post(`${API_URL}/database`, {}, axiosOpts)),
+  removeDb: async (dbId) => exec(axios.delete(`${API_URL}/database/${dbId}`, axiosOpts))
+}
