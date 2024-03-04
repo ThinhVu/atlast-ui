@@ -79,5 +79,9 @@ export const userAPI = {
 export const dbAPI = {
   getDbs: async () => exec(axios.get(`${API_URL}/database`, axiosOpts)),
   createDb: async () => exec(axios.post(`${API_URL}/database`, {}, axiosOpts)),
-  removeDb: async (dbId) => exec(axios.delete(`${API_URL}/database/${dbId}`, axiosOpts))
+  removeDb: async (dbId) => exec(axios.delete(`${API_URL}/database/${dbId}`, axiosOpts)),
+  getApiKeys: async (dbId) => exec(axios.get(`${API_URL}/api-key/${dbId}`, axiosOpts)),
+  createApiKey: async (dbId) => exec(axios.post(`${API_URL}/api-key/${dbId}`, {}, axiosOpts)),
+  enableApiKey: async (dbId, apiKey) => exec(axios.put(`${API_URL}/api-key/${dbId}/${apiKey}`, {enable: true} ,axiosOpts)),
+  disableApiKey: async (dbId, apiKey) => exec(axios.put(`${API_URL}/api-key/${dbId}/${apiKey}`, {enable: false} ,axiosOpts))
 }
