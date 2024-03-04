@@ -2,8 +2,9 @@
 import dayjs from 'dayjs';
 import {dbAPI} from "@/api";
 import {ref, onMounted, inject} from "vue";
+import DialogDbConnect from "@/components/DialogDbConnect.vue";
 
-const {msgBox, notification} = inject('TSystem')
+const {msgBox, dialog, notification} = inject('TSystem')
 
 const databases = ref([])
 onMounted(loadDbs)
@@ -18,7 +19,10 @@ async function createNewDb() {
 }
 
 function info(db) {
-
+  dialog.show({
+    component: DialogDbConnect,
+    data: db
+  })
 }
 
 async function deleteDbConfirm(db) {
