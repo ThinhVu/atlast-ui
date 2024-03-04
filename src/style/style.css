@@ -82,3 +82,41 @@ li.item {
     left: 400px;
     top: 0;
 }
+
+.modal {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background-color: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-inner{
+    position: relative;
+    background: #fff;
+    padding: 32px;
+
+}
+
+.custom-button {
+    background-color: transparent;
+    border: #1f252f 1px solid;
+    transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+    background-color: #cccccc; /* Màu nền khác khi hover */
+}
+
+.custom-button:focus {
+    outline: 2px solid #c8b125;
+    background-color: #cccccc
+    /* Ví dụ: hiển thị border màu đỏ khi focus */
+}
+
+
