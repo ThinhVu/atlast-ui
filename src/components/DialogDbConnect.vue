@@ -2,6 +2,7 @@
 import {ref, computed, inject, onMounted} from 'vue'
 import {copyToClipboard} from "@/utils/common";
 import {dbAPI} from "@/api";
+import TabHeader from "@/components/TabHeader.vue";
 
 const props = defineProps({
   _id: String,
@@ -17,10 +18,11 @@ const TABS = {
   CONN_STR: 1,
   API_KEY: 2
 }
+const tabs = [
+  {text: 'Connection string', value: TABS.CONN_STR},
+  {text: 'API Key', value: TABS.API_KEY}
+]
 const tab = ref(TABS.CONN_STR)
-function setTab(newVal) {
-  tab.value = newVal
-}
 
 const DB_URL = 'mongodb.net'
 const REPLICA_SET = 'rs0'
@@ -58,28 +60,31 @@ onMounted(loadApiKeys)
 </script>
 
 <template>
-  <TBaseDialog title="DB Connect" showCloseIcon class="min-w-600px min-h-200px" @close="emit('close')">
-    <template #body>
-      <div class="fr ai-c fg-16px">
-        <div @click="setTab(TABS.CONN_STR)">Connection String</div>
-        <div @click="setTab(TABS.API_KEY)">API Key (Serverless)</div>
-      </div>
+  <div class="bc:white pb-3 mx-a min-w-600px min-h-300px fc br-2 ovf-h">
+    <div class="fr ai-c" style="border-bottom: 1px solid #ddd">
+      <TabHeader :tabs="tabs" v-model="tab" class="f1"/>
+      <TIcon class="mr-3 clickable" @click="emit('close')">fa fa-times</TIcon>
+    </div>
 
+    <div class="px-3 py-3 f1">
       <template v-if="tab === TABS.CONN_STR">
         <TText v-model="connectionStr" multiLine :cols="80" :rows="4" class="f1"/>
       </template>
       <template v-else>
-        <div v-for="apiKey in apiKeys" :key="apiKey" class="fr ai-c fg-4px">
-          <TText v-model="apiKey.key" class="f1"/>
-          <TBtn @click="copyApiKey(apiKey)">Copy</TBtn>
+        <div class="fc fg-4px">
+          <div v-for="apiKey in apiKeys" :key="apiKey" class="fr ai-c fg-4px">
+            <TText v-model="apiKey.key" class="f1"/>
+            <TBtn @click="copyApiKey(apiKey)">Copy</TBtn>
+          </div>
         </div>
       </template>
-    </template>
-    <template #footer>
+    </div>
+
+    <div class="px-3 py-1 fr ai-c jc-fe">
       <TBtn v-if="tab === TABS.CONN_STR" @click="copyConnectionStr" primary>Copy</TBtn>
       <TBtn v-else @click="createApiKey" save>Create API Key</TBtn>
-    </template>
-  </TBaseDialog>
+    </div>
+  </div>
 </template>
 
 <style scoped>
