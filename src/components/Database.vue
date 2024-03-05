@@ -66,7 +66,7 @@ async function deleteDbConfirm(db) {
         </td>
         <td>
           <div class="fr ai-c fg-4px">
-            <t-btn edit class="fn-btn" @click="info(db)">
+            <t-btn primary class="fn-btn" @click="info(db)">
               <t-icon>fas fa-edit@20px:#fff</t-icon>
             </t-btn>
             <t-btn delete class="fn-btn" @click="deleteDbConfirm(db)">
