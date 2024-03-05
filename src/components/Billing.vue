@@ -1,13 +1,24 @@
 <script setup>
-import {ref, computed} from 'vue'
+import {ref, computed, inject} from 'vue'
+import DialogCustom from './main/billing/DialogCustom.vue'
+
+
+const {notification} = inject('TSystem')
+
 const custom = ref('Custom')
-const billValue = ['$10','$20','$50',custom.value]
+const billValue = ['$10','$20','$50']
 
 const selectedValue = ref('')
 
 const currentBalance = computed(() => {
     return selectedValue.value;
 });
+
+function getCustom(){
+
+}
+
+
 </script>
 
 <template>
@@ -18,9 +29,13 @@ const currentBalance = computed(() => {
             <p>Buy credit</p>
         </div>
         <div style="display: flex">
-                <div v-for="(item,index) in billValue" :key="index" style="margin: 5px">
-                    <button class="custom-button" @click="selectedValue=item">{{item}}</button>
-                </div>
+            <div v-for="(item,index) in billValue" :key="index" style="margin: 5px">
+                <button class="custom-button" @click="selectedValue=item">{{ item }}</button>
+            </div>
+            <div>
+                <button class="custom-button" style="margin: 5px">{{ custom }}</button>
+            </div>
+
         </div>
         <div>
             <button class="mt-2" style="background-color: lightgreen; width: 280px">Buy credit</button>

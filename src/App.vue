@@ -1,12 +1,17 @@
 <template>
+<!--  <TSystem>-->
+<!--    <router-view #default="{ Component }">-->
+<!--      <component :is="Component"/>-->
+<!--    </router-view>-->
+<!--  </TSystem>-->
+<!--  -->
   <TSystem>
-    <router-view #default="{ Component }">
-      <component :is="Component"/>
-    </router-view>
+      <Billing/>
   </TSystem>
 </template>
 
 <script setup>
+import Billing from './components/Billing.vue'
 </script>
 
 <style>
