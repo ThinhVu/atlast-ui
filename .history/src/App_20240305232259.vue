@@ -1,9 +1,13 @@
 <template>
- <TSystem>
-   <router-view #default="{ Component }">
-     <component :is="Component"/>
-   </router-view>
- </TSystem>
+<!--  <TSystem>-->
+<!--    <router-view #default="{ Component }">-->
+<!--      <component :is="Component"/>-->
+<!--    </router-view>-->
+<!--  </TSystem>-->
+<!--  -->
+  <TSystem>
+      <Billing/>
+  </TSystem>
 </template>
 
 <script setup>
