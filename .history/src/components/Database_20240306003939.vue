@@ -24,7 +24,7 @@ async function loadDbs() {
 function showCreateDbDialog() {
   dialog.show({
     component: DialogDbCreate,
-    data: name
+    data: ''
   })
 
 }
