@@ -24,7 +24,7 @@ const tabs = [
 ]
 const tab = ref(TABS.CONN_STR)
 
-const DB_URL = 'mongodb.net'
+const DB_URL = '127.0.0.1:27017'
 const REPLICA_SET = 'rs0'
 const connectionStr = computed(() => `mongodb://${props.username}:${props.password}@${DB_URL}/?authSource=${props.name}&retryWrites=true&w=majority&replicaSet=${REPLICA_SET}&readPreference=nearest`)
 

@@ -24,14 +24,17 @@ const changePass = async()=> {
 </script>
 
 <template>
-    <div>
+  <section class="px-4 py-4">
+    <div class="px-4 py-4 w-350px" style="border: 1px solid">
+      <div class="fc fg-16px">
         <h1>Change password</h1>
-        <p><t-password v-model="currentPwd" class="w-50" label="Current password"/></p>
-        <p><t-password v-model="newPwd" class="w-50" label="New password"/></p>
-        <p><t-password v-model="confirmPwd" class="w-50" label="Confirm password"/></p>
+        <t-password v-model="currentPwd" class="w-50" label="Current password"/>
+        <t-password v-model="newPwd" class="w-50" label="New password"/>
+        <t-password v-model="confirmPwd" class="w-50" label="Confirm password"/>
         <p v-show = "!check" class="red-text">Password don't match. Please try again</p>
+        <t-btn class="w-200px" save @click="changePass">Change password</t-btn>
+      </div>
     </div>
-    <div>
-        <button @click="changePass">Change password</button>
-    </div>
+  </section>
+
 </template>
