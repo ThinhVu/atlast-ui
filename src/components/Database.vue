@@ -3,11 +3,9 @@ import dayjs from 'dayjs';
 import {dbAPI} from "@/api";
 import {ref, onMounted, inject} from "vue";
 import DialogDbConnect from "@/components/DialogDbConnect.vue";
-import DialogDBCreate from "@/components/DialogDbCreate.vue"
+import DialogDbCreate from "@/components/DialogDbCreate.vue"
 
 const {msgBox, dialog, notification} = inject('TSystem')
-
-const name =ref('')
 
 const databases = ref([])
 onMounted(loadDbs)
@@ -16,17 +14,15 @@ async function loadDbs() {
   databases.value = await dbAPI.getDbs()
 }
 
-// async function createNewDb(name) {
-//   await dbAPI.createDb(name)
-//   setTimeout(loadDbs, 1000)
-// }
+function loadData() {
+  setTimeout(loadDbs, 500)
+}
 
-function showCreateDbDialog() {
+function showCreateDbDialog(name) {
   dialog.show({
     component: DialogDbCreate,
     data: name
   })
-
 }
 
 function info(db) {
@@ -55,7 +51,7 @@ async function deleteDbConfirm(db) {
 <template>
   <section data-name="system-config" class="fc w-100 h-100 fg-12px px-3 py-3">
     <div>
-      <t-btn save @click="showCreateDbDialog()">Create database</t-btn>
+      <t-btn save @click="showCreateDbDialog(name)" @loadData="loadData()">Create database</t-btn>
     </div>
     <t-table class="w-100 max-h-400px">
       <thead>
