@@ -1,4 +1,5 @@
 <script setup>
+import {isEmpty} from 'lodash-es';
 import dayjs from 'dayjs';
 import {dbAPI} from "@/api";
 import {ref, onMounted, inject} from "vue";
@@ -18,11 +19,20 @@ function loadData() {
   setTimeout(loadDbs, 500)
 }
 
-function showCreateDbDialog(name) {
-  dialog.show({
-    component: DialogDbCreate,
-    data: name
-  })
+async function showCreateDbDialog() {
+  const dbName = await dialog.show(DialogDbCreate)
+  if (isEmpty(dbName)) {
+    notification.err('db name is empty')
+    return
+  }
+  try {
+    await dbAPI.createDb(dbName);
+    notification.info('Successfully created new database');
+    setTimeout(loadDbs, 500);
+  } catch (error) {
+    console.error('Error creating new database:', error);
+  }
+
 }
 
 function info(db) {
@@ -51,7 +61,7 @@ async function deleteDbConfirm(db) {
 <template>
   <section data-name="system-config" class="fc w-100 h-100 fg-12px px-3 py-3">
     <div>
-      <t-btn save @click="showCreateDbDialog(name)" @loadData="loadData()">Create database</t-btn>
+      <t-btn save @click="showCreateDbDialog">Create database</t-btn>
     </div>
     <t-table class="w-100 max-h-400px">
       <thead>
