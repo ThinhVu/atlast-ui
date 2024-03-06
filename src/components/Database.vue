@@ -32,14 +32,17 @@ async function showCreateDbDialog() {
   } catch (error) {
     console.error('Error creating new database:', error);
   }
-
 }
 
-function info(db) {
+function connect(db) {
   dialog.show({
     component: DialogDbConnect,
     data: db
   })
+}
+
+function explore(db) {
+  notification.info('Not implement yet!')
 }
 
 async function deleteDbConfirm(db) {
@@ -83,11 +86,14 @@ async function deleteDbConfirm(db) {
         </td>
         <td>
           <div class="fr ai-c fg-4px">
-            <t-btn primary class="fn-btn" @click="info(db)">
-              <t-icon>fas fa-edit@20px:#fff</t-icon>
+            <t-btn primary class="fn-btn" @click="connect(db)">
+              Connect
+            </t-btn>
+            <t-btn secondary class="fn-btn" @click="explore(db)">
+              Explore
             </t-btn>
             <t-btn delete class="fn-btn" @click="deleteDbConfirm(db)">
-              <t-icon>fas fa-times@20px:#fff</t-icon>
+              Remove
             </t-btn>
           </div>
         </td>
