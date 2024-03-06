@@ -70,6 +70,7 @@ async function deleteDbConfirm(db) {
       <thead>
       <tr>
         <th class="z-index-1">Name</th>
+        <th class="z-index-1">Db Name</th>
         <th class="z-index-1">Size (GB)</th>
         <th class="z-index-1">Create At</th>
         <th class="w-10px z-index-1">Action</th>
@@ -78,6 +79,7 @@ async function deleteDbConfirm(db) {
       <tbody>
       <tr v-for="db in databases" :key="db._id">
         <td>{{db.name}}</td>
+        <td>{{db.dbName}}</td>
         <td>
           {{db.sizeInGB}}
         </td>
