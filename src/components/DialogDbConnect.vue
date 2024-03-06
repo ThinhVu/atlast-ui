@@ -93,7 +93,10 @@ db = await mongoose.connect('{{ connectionStr }}', {connectTimeoutMS: 10000})</p
             <TBtn @click="copyApiKey(apiKey)">Copy</TBtn>
           </div>
         </div>
-        <TBtn @click="createApiKey" save>Create API Key</TBtn>
+        <div class="fr ai-c jc-sb">
+          <a href="https://github.com/ThinhVu/atlast-db-api-example">You can find usage example here</a>
+          <TBtn @click="createApiKey" save>Create API Key</TBtn>
+        </div>
       </template>
     </div>
   </div>
