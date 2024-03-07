@@ -15,10 +15,6 @@ async function loadDbs() {
   databases.value = await dbAPI.getDbs()
 }
 
-function loadData() {
-  setTimeout(loadDbs, 500)
-}
-
 async function showCreateDbDialog() {
   const dbName = await dialog.show(DialogDbCreate)
   if (isEmpty(dbName)) {

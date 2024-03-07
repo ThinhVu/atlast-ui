@@ -85,3 +85,11 @@ export const dbAPI = {
   enableApiKey: async (dbId, apiKey) => exec(axios.put(`${API_URL}/api-key/${dbId}/${apiKey}`, {enable: true} ,axiosOpts)),
   disableApiKey: async (dbId, apiKey) => exec(axios.put(`${API_URL}/api-key/${dbId}/${apiKey}`, {enable: false} ,axiosOpts))
 }
+
+export const paymentAPI = {
+  getCurrentBalance: async() => exec(axios.get(`${API_URL}/payment`, axiosOpts)),
+  depositMoney: async (amount) => exec(axios.post(`${API_URL}/payment/deposit`, {amount}, axiosOpts)),
+  updateBalance: async (amount) => exec(axios.post(`${API_URL}/payment`, {amount}, axiosOpts)),
+  getPaymentHistory: async () => exec(axios.get(`${API_URL}/payment/history`, axiosOpts)),
+  updatePaymentHistory: async (value) => exec(axios.post(`${API_URL}/payment/history`, {value}, axiosOpts)),
+}
