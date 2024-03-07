@@ -26,7 +26,7 @@ const tab = ref(TABS.CONN_STR)
 
 const DB_URL = '127.0.0.1:27017'
 const REPLICA_SET = 'rs0'
-const connectionStr = computed(() => `mongodb://${props.username}:${props.password}@${DB_URL}/?authSource=${props.dbName}&retryWrites=true&w=majority&replicaSet=${REPLICA_SET}&readPreference=nearest`)
+const connectionStr = computed(() => `mongodb://${props.username}:${props.password}@${DB_URL}/${props.dbName}?authSource=${props.dbName}&retryWrites=true&w=majority&replicaSet=${REPLICA_SET}&readPreference=nearest`)
 
 const apiKeys = ref([])
 async function loadApiKeys() {
@@ -46,12 +46,6 @@ async function disableApiKey(apiKey) {
   setTimeout(loadApiKeys, 500)
 }
 
-
-function copyConnectionStr() {
-  copyToClipboard(connectionStr.value)
-  notification.info('Copied')
-  emit('close')
-}
 function copyApiKey(apiKey) {
   copyToClipboard(apiKey)
 }
@@ -67,22 +61,43 @@ onMounted(loadApiKeys)
     </div>
 
     <div class="px-3 py-3 f1">
-      <template v-if="tab === TABS.CONN_STR">
-        <TText v-model="connectionStr" multiLine :cols="80" :rows="4" class="f1"/>
-      </template>
+      <div v-if="tab === TABS.CONN_STR" class="fc fg-8px">
+        <div>
+          <p class="mb-1"><b>Connection string</b></p>
+          <TText v-model="connectionStr" multiLine :cols="80" :rows="4" class="f1"/>
+        </div>
+
+        <div>
+          <p class="mb-1"><b>MongoDb driver example code</b></p>
+          <pre class="max-w-600px br-2 px-2 py-2 ovf-x-s fs-s" style="border: 1px solid #ddd">
+const {MongoClient} = require('mongodb');
+const client = new MongoClient(
+  '{{ connectionStr }}',
+  { connectTimeoutMS: 1000000000, socketTimeoutMS: 100000}
+);
+await client.connect();
+db = client.db('{{ dbName }}');</pre>
+        </div>
+
+        <div>
+          <p class="mb-1"><b>Mongoose example code</b></p>
+          <pre class="max-w-600px br-2 px-2 py-2 ovf-x-s fs-s" style="border: 1px solid #ddd">
+const mongoose = require('mongoose');
+db = await mongoose.connect('{{ connectionStr }}', {connectTimeoutMS: 10000})</pre>
+        </div>
+      </div>
       <template v-else>
-        <div class="fc fg-4px">
+        <div class="fc fg-4px mb-2">
           <div v-for="apiKey in apiKeys" :key="apiKey" class="fr ai-c fg-4px">
             <TText v-model="apiKey.key" class="f1"/>
             <TBtn @click="copyApiKey(apiKey)">Copy</TBtn>
           </div>
         </div>
+        <div class="fr ai-c jc-sb">
+          <a href="https://github.com/ThinhVu/atlast-db-api-example">You can find usage example here</a>
+          <TBtn @click="createApiKey" save>Create API Key</TBtn>
+        </div>
       </template>
-    </div>
-
-    <div class="px-3 py-1 fr ai-c jc-fe">
-      <TBtn v-if="tab === TABS.CONN_STR" @click="copyConnectionStr" primary>Copy</TBtn>
-      <TBtn v-else @click="createApiKey" save>Create API Key</TBtn>
     </div>
   </div>
 </template>

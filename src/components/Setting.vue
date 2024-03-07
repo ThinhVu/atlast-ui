@@ -25,7 +25,7 @@ const changePass = async()=> {
 
 <template>
   <section class="px-4 py-4">
-    <div class="px-4 py-4 w-350px" style="border: 1px solid">
+    <div class="px-4 py-4 w-350px br-2" style="border: 1px solid #ddd">
       <div class="fc fg-16px">
         <h1>Change password</h1>
         <t-password v-model="currentPwd" class="w-50" label="Current password"/>

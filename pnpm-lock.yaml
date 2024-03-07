@@ -1,9 +1,10 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
-  '@tvux/hmmjs':
-    specifier: ^0.69.420
-    version: 0.69.420
   axios:
     specifier: ^1.3.4
     version: 1.3.4
@@ -737,10 +738,6 @@ packages:
 
   /@socket.io/component-emitter@3.1.0:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
-    dev: false
-
-  /@tvux/hmmjs@0.69.420:
-    resolution: {integrity: sha512-BoR2uRoF5vgoo6RQ0h3OVGVAxLCQ63qJnbgJafmVNWaFv8hp0DqYPd9eSb4mePyIjW3JNHhodVJS0C85g7SyRw==}
     dev: false
 
   /@types/estree@1.0.0:

@@ -1,35 +1,41 @@
 <script setup>
 import {ref, computed} from 'vue'
+import {user} from '@/app-state'
 
-const custom = ref('Custom')
-const billValue = ['$10', '$20', '$50', custom.value]
+// TODO: display current balance
+const currentBalance = computed(() => user.value.balance);
 
-const selectedValue = ref('')
-
-const currentBalance = computed(() => {
-  return selectedValue.value;
-});
+const predefinedBuyValues = [10, 20, 50]
+const selectedValue = ref(predefinedBuyValues[0])
+const proceedBuy = async () => {
+  const amount = Number(selectedValue.value)
+  // TODO: buy amount
+  console.log('proceedBuy', amount)
+}
 </script>
 
 <template>
   <section class="px-4 py-4">
     <div class="fr fg-16px">
-      <div class="px-4 py-4 w-350px br-3" style="border: 1px solid">
-        <div class="mt-2 mb-4">
-          <p style="padding-bottom: 15px">Your balance</p>
-          <p style="padding-bottom: 30px">Current balance: {{ (currentBalance !== 'Custom') ? currentBalance : '' }}</p>
-          <p>Buy credit</p>
-        </div>
+      <div class="px-4 py-4 w-350px br-2 fc fg-16px" style="border: 1px solid #ddd">
+        <p>Your balance</p>
+        <p>Current balance: {{ (currentBalance !== 'Custom') ? currentBalance : '' }}</p>
+        <hr/>
+        <p>Buy credit</p>
         <div class="fr fg-8px">
-          <div v-for="(item, index) in billValue" :key="index">
-            <t-btn @click="selectedValue=item">{{ item }}</t-btn>
-          </div>
+          <t-btn v-for="item in predefinedBuyValues"
+                 :key="item"
+                 @click="selectedValue = item"
+                 :primary="selectedValue === item">
+            {{ item }}
+          </t-btn>
+          <TText v-model="selectedValue"/>
         </div>
-        <div>
-          <t-btn save class="mt-2 w-280px">Buy credit</t-btn>
-        </div>
+        <t-btn @click="proceedBuy" save class="mt-2">Buy credit</t-btn>
       </div>
-      <div class="px-4 py-4 f1 br-3" style="border: 1px solid">Payment history</div>
+      <div class="px-4 py-4 f1 br-3" style="border: 1px solid #ddd">
+        Payment history
+      </div>
     </div>
   </section>
 </template>
