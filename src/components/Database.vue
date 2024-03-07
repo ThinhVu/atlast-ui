@@ -14,15 +14,15 @@ async function loadDbs() {
   databases.value = await dbAPI.getDbs()
 }
 
-function loadData() {
-  setTimeout(loadDbs, 500)
-}
-
-function showCreateDbDialog(name) {
-  dialog.show({
+async function showCreateDbDialog(name) {
+  const rs = await dialog.show({
     component: DialogDbCreate,
     data: name
   })
+  if (rs) {
+    setTimeout(loadDbs, 1000)
+    notification.info('Successfully created new database');
+  }
 }
 
 function info(db) {
@@ -51,7 +51,7 @@ async function deleteDbConfirm(db) {
 <template>
   <section data-name="system-config" class="fc w-100 h-100 fg-12px px-3 py-3">
     <div>
-      <t-btn save @click="showCreateDbDialog(name)" @loadData="loadData()">Create database</t-btn>
+      <t-btn save @click="showCreateDbDialog(name)">Create database</t-btn>
     </div>
     <t-table class="w-100 max-h-400px">
       <thead>
