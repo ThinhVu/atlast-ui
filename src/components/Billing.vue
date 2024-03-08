@@ -2,13 +2,20 @@
 import {ref, computed, inject, onMounted} from 'vue'
 import {user} from '@/app-state'
 import {paymentAPI} from '../api/index'
+import dayjs from "dayjs";
 
 const {msgBox, notification} = inject('TSystem')
 
+const paymentHistory = ref([])
 
 onMounted(loadBalance)
+onMounted(showPayment)
 async function loadBalance() {
   user.value = await paymentAPI.getCurrentBalance();
+}
+
+async function showPayment() {
+  paymentHistory.value = await paymentAPI.getPaymentHistory()
 }
 
 const currentBalance = computed(() => user.value.balance);
@@ -20,18 +27,12 @@ const selectedValue = ref(predefinedBuyValues[0])
 
 const proceedBuy = async () => {
   const amount = Number(selectedValue.value)
-  if(Number(currentBalance.value) < amount || currentBalance.value==="") {
-    await msgBox.show(
-      'Insufficient funds to complete this transaction.',
-      'Please deposit more money into your account or update your payment method.',
-      msgBox.Buttons.OK
-    )
-  } else {
-    await paymentAPI.updateBalance(amount);
-    notification.info('Successful making payment')
-    console.log('proceedBuy', amount)
+    await paymentAPI.depositMoney(amount);
+    notification.info('Successful deposit payment')
+    console.log('proceedBuy', amount);
+    await paymentAPI.updatePaymentHistory(amount);
     setTimeout(loadBalance, 500);
-  }
+    setTimeout(showPayment, 500);
 }
 
 </script>
@@ -56,7 +57,25 @@ const proceedBuy = async () => {
         <t-btn @click="proceedBuy" save class="mt-2">Buy credit</t-btn>
       </div>
       <div class="px-4 py-4 f1 br-3" style="border: 1px solid #ddd">
-        Payment history
+        <p class="mb-3 ac-c f1">Payment history</p>
+        <t-table class="w-100 max-h-400px">
+          <thead>
+          <tr>
+            <th class="z-index-1">Amount</th>
+            <th class="z-index-1">Date</th>
+            <th class="z-index-1">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="pm in paymentHistory" :key="pm._id">
+            <td>{{pm.value}}</td>
+            <td>
+              {{dayjs(pm.createDt).format('YYYY-MM-DD HH:mm:ss')}}
+            </td>
+            <td>Succeeded</td>
+          </tr>
+          </tbody>
+        </t-table>
       </div>
     </div>
   </section>
