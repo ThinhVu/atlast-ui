@@ -104,19 +104,21 @@ li.item {
 }
 
 .custom-button {
+    margin-right: 8px;
+    border-radius: 160px;
+    margin-top: 16px;
+    align-content: flex-end;
+    color:#FFFFFF;
     background-color: transparent;
-    border: #1f252f 1px solid;
+    border: 1px solid #FFFFFF;
     transition: background-color 0.3s ease;
 }
 
 .custom-button:hover {
-    background-color: #cccccc; /* Màu nền khác khi hover */
-}
-
-.custom-button:focus {
-    outline: 2px solid #c8b125;
-    background-color: #cccccc
-    /* Ví dụ: hiển thị border màu đỏ khi focus */
+    background-color: #c15f0c;
+    color: black;
+    font-weight: bold;
+    border: #c15f0c;
 }
 
 

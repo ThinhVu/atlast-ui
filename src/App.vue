@@ -4,9 +4,12 @@
      <component :is="Component"/>
    </router-view>
  </TSystem>
+
+<!--  <Test/>-->
 </template>
 
 <script setup>
+import Test from './pages/Home.vue'
 </script>
 
 <style>

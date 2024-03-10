@@ -1,54 +1,33 @@
 <template>
-  <TLoading :action="ACTIONS.AUTH">
-    <template #loading>
-      <TPulseBlock class="h-100vh w-100vw"/>
-    </template>
-    <TDashboard v-if="user" :sidebar-items="sidebarItems">
-      <template #header>
-        <div class="px-2">Atlast</div>
-      </template>
-      <template #sidebar-footer>
-        <t-btn @click="userAPI.signOut">Sign out</t-btn>
-      </template>
-    </TDashboard>
-    <Auth v-else/>
-  </TLoading>
+  <div>
+    <div class="h-100px bc:#232f3e">
+      <div class="fr jc-fe">
+        <button class="custom-button">Sign In</button>
+        <button class="custom-button" @click="navigateToDashboard">Dashboard</button>
+      </div>
+      <div class="fr jc-c">
+          <p v-for="item in headers" :key="item" class="c:#FFFFFF ml-25 mt-6 fs-15px">
+            {{item}}
+          </p>
+      </div>
+    </div>
+  </div>
 </template>
-<script setup lang="ts">
-import {inject, computed, onBeforeMount} from 'vue';
-import {userAPI} from '@/api';
-import {user} from '@/app-state';
-import {socketConnect} from '@/socket/socket';
-import Database from "../components/Database.vue";
-import Billing from "../components/Billing.vue";
-import Setting from "../components/Setting.vue";
-import Auth from "../components/Auth.vue";
 
-const sidebarItems = computed(() => {
-  return [
-    {title: 'Database', icon: 'fas fa-bar-chart@20px:#aaa', component: Database},
-    {title: 'Billing', icon: 'fas fa-key@20px:#aaa', component: Billing},
-    {title: 'Setting', icon: 'fas fa-folder@20px:#aaa', component: Setting}
-  ]
-})
+<script setup>
+import {ref} from 'vue'
+import {useRouter} from 'vue-router';
 
-const {loading, notification} = inject('TSystem')
+const headers = ["Products", "Solution", "Pricing", "Documentation", "Explore More"]
+const headerStats = ref('')
 
-const ACTIONS = {
-  AUTH: 'authenticate'
-}
+const router = useRouter();
 
-onBeforeMount(async () => {
-  const access_token = window.localStorage.getItem('access_token')
-  if (!access_token) return
-  loading.begin(ACTIONS.AUTH)
-  try {
-    await userAPI.auth(access_token)
-    socketConnect(access_token)
-  } catch (e) {
-    notification.err(e, {duration: 0})
-  } finally {
-    loading.end(ACTIONS.AUTH)
-  }
-})
+const navigateToDashboard = () => {
+  router.push('/dashboard');
+};
 </script>
+
+<style scoped>
+
+</style>
