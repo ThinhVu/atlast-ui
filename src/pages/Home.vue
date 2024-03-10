@@ -5,7 +5,7 @@
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
         <TSpacer/>
         <TBtn @click="signIn">Sign in</TBtn>
-        <TBtn @click="createAnAccount">Create an account</TBtn>
+        <TBtn save @click="createAnAccount">Create an account</TBtn>
       </div>
     </div>
   </div>
