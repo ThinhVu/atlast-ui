@@ -2,6 +2,9 @@
   <div class="w-100 h-100 fr ai-c fix z-index-999">
     <div class="px-4 py-4 br-10px mx-a fc fg-16px bc:#fff"
          style="border: 1px solid rgba(255,255,255,0.2); min-width: 300px">
+      <div class="ta-c">
+        <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 200px;"/>
+      </div>
       <p><t-text v-model="email" class="w-100" label="Email" placeholder="enter your email"/></p>
       <p><t-password v-model="password" class="w-100" label="Password"/></p>
       <div class="fr ai-c fg-4px">

@@ -2,7 +2,7 @@
   <div>
     <div class="bc:#232f3e">
       <div class="fr ai-c jc-fe px-2 py-2 fg-8px">
-        <span class="c:#fff">Atlast</span>
+        <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
         <TSpacer/>
         <TBtn @click="signIn">Sign in</TBtn>
         <TBtn @click="createAnAccount">Create an account</TBtn>

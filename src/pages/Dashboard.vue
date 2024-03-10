@@ -5,7 +5,7 @@
     </template>
     <TDashboard v-if="user" :sidebar-items="sidebarItems">
       <template #header>
-        <div class="px-2">Atlast</div>
+        <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
       </template>
       <template #sidebar-footer>
         <t-btn @click="userAPI.signOut">Sign out</t-btn>
