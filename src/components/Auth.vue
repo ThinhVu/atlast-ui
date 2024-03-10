@@ -1,37 +1,52 @@
 <template>
   <div class="w-100 h-100 fr ai-c fix z-index-999">
-    <div class="px-4 py-4 br-10px mx-a fc fg-16px"
+    <div class="px-4 py-4 br-10px mx-a fc fg-16px bc:#fff"
          style="border: 1px solid rgba(255,255,255,0.2); min-width: 300px">
       <p><t-text v-model="email" class="w-100" label="Email" placeholder="enter your email"/></p>
       <p><t-password v-model="password" class="w-100" label="Password"/></p>
-      <div class="fr ai-c jc-fe fg-4px">
-        <t-btn save @click="signUp">Sign Up</t-btn>
-        <t-btn primary @click="signIn">Sign In</t-btn>
+      <div class="fr ai-c fg-4px">
+        <t-btn @click="$emit('close')">Cancel</t-btn>
+        <TSpacer/>
+        <t-btn v-if="mode === 'signUp'" save @click="signUp">Sign Up</t-btn>
+        <t-btn v-else primary @click="signIn">Sign In</t-btn>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import {ref} from 'vue'
+import {ref, inject} from 'vue'
 import {userAPI} from '@/api';
-import {useRouter} from 'vue-router';
+import {useNavigation} from "@/composables/useNavigation";
+import {socketConnect} from "@/socket/socket";
 
-const router = useRouter()
+defineProps({mode: String})
+const emit = defineEmits(['close'])
+
+const {notification} = inject('TSystem')
+const nav = useNavigation()
 
 const email = ref()
 const password = ref()
 
 const signIn = async () => {
-  const token = await userAPI.signIn(email.value, password.value)
-  if (token) {
-    await router.push({path: '/'})
+  try {
+    const {token} = await userAPI.signIn(email.value, password.value)
+    socketConnect(token)
+    await nav.gotoDashboard()
+    emit('close')
+  } catch (e) {
+    notification.err(e)
   }
 }
 
 const signUp = async () => {
-  const token = await userAPI.signUp(email.value, password.value)
-  if (token) {
-    await router.push({path: '/'})
+  try {
+    const {token} = await userAPI.signUp(email.value, password.value)
+    socketConnect(token)
+    await nav.gotoDashboard()
+    emit('close')
+  } catch (e) {
+    notification.err(e)
   }
 }
 </script>

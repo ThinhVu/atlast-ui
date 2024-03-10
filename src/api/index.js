@@ -33,47 +33,22 @@ async function _saveAuthSession({user, token}) {
 
 export const userAPI = {
   signUp: async (email, password) => {
-    try {
-      const data = await exec(axios.post(`${API_URL}/user/sign-up`, {email, password}))
-      if (data.token) {
-        await _saveAuthSession(data);
-      } else {
-        console.error('Token missed!');
-      }
-      return data.token;
-    } catch (e) {
-      console.error(e)
-    }
+    const {data} = await axios.post(`${API_URL}/user/sign-up`, {email, password})
+    await _saveAuthSession(data)
+    return data
   },
   signIn: async (email, password) => {
-    try {
-      const data = await exec(axios.post(`${API_URL}/user/sign-in`, {email, password}))
-      console.log('data', data)
-      if (data.token) {
-        await _saveAuthSession(data);
-      } else {
-        console.log('signIn failed')
-      }
-      return data.token;
-    } catch (e) {
-      console.error(e)
-    }
+    const {data} = await axios.post(`${API_URL}/user/sign-in`, {email, password})
+    await _saveAuthSession(data)
+    return data
   },
   auth: async token => {
-    try {
-      const data = await exec(axios.get(`${API_URL}/user/auth`, {headers: {Authorization: `bearer ${token}`}}));
-      if (data.token) {
-        await _saveAuthSession(data);
-      } else {
-        console.log('Auth failed')
-      }
-      return data.token;
-    } catch (e) {
-      return null;
-    }
+    const {data} = await axios.get(`${API_URL}/user/auth`, {headers: {Authorization: `bearer ${token}`}})
+    await _saveAuthSession(data)
+    return data
   },
   signOut: async () => exec(axios.post(`${API_URL}/user/sign-out`), {}, axiosOpts),
-  changePassword: async (change) => exec(() => axios.put(`${API_URL}/user/change-password`, change, axiosOpts)),
+  changePassword: async (change) => exec(axios.put(`${API_URL}/user/change-password`, change, axiosOpts)),
 }
 
 export const dbAPI = {

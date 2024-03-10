@@ -1,31 +1,54 @@
 <template>
   <div>
-    <div class="h-100px bc:#232f3e">
-      <div class="fr jc-fe">
-        <button class="custom-button">Sign In</button>
-        <button class="custom-button" @click="navigateToDashboard">Dashboard</button>
-      </div>
-      <div class="fr jc-c">
-          <p v-for="item in headers" :key="item" class="c:#FFFFFF ml-25 mt-6 fs-15px">
-            {{item}}
-          </p>
+    <div class="bc:#232f3e">
+      <div class="fr ai-c jc-fe px-2 py-2 fg-8px">
+        <span class="c:#fff">Atlast</span>
+        <TSpacer/>
+        <TBtn @click="signIn">Sign in</TBtn>
+        <TBtn @click="createAnAccount">Create an account</TBtn>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import {useRouter} from 'vue-router';
+import {inject} from 'vue'
+import {useNavigation} from '@/composables/useNavigation'
+import {userAPI} from "@/api";
+import {socketConnect} from "@/socket/socket";
+import Auth from "@/components/Auth.vue";
 
-const headers = ["Products", "Solution", "Pricing", "Documentation", "Explore More"]
-const headerStats = ref('')
+const {dialog, notification} = inject('TSystem')
+const nav = useNavigation()
 
-const router = useRouter();
+async function signIn() {
+  const access_token = window.localStorage.getItem('access_token')
+  if (access_token) {
+    console.log('found access_token. trying to login using access_token')
+    try {
+      const {token} = await userAPI.auth(access_token)
+      socketConnect(token)
+      await nav.gotoDashboard()
+      return
+    } catch (e) {
+      console.log('login using access_token failed')
+      notification.err(e)
+    }
+  }
 
-const navigateToDashboard = () => {
-  router.push('/dashboard');
-};
+  console.log('show sign-in dialog')
+  dialog.show({
+    component: Auth,
+    data: {mode: 'signIn'}
+  })
+}
+
+const createAnAccount = () => {
+  dialog.show({
+    component: Auth,
+    data: {mode: 'signUp'}
+  })
+}
 </script>
 
 <style scoped>

@@ -11,7 +11,6 @@
         <t-btn @click="userAPI.signOut">Sign out</t-btn>
       </template>
     </TDashboard>
-    <Auth v-else/>
   </TLoading>
 </template>
 <script setup lang="ts">
@@ -19,10 +18,12 @@ import {inject, computed, onBeforeMount} from 'vue';
 import {userAPI} from '@/api';
 import {user} from '@/app-state';
 import {socketConnect} from '@/socket/socket';
-import Database from "../components/Database.vue";
-import Billing from "../components/Billing.vue";
-import Setting from "../components/Setting.vue";
-import Auth from "../components/Auth.vue";
+import Database from "@/components/Database.vue";
+import Billing from "@/components/Billing.vue";
+import Setting from "@/components/Setting.vue";
+import {useNavigation} from '@/composables/useNavigation'
+
+const nav = useNavigation()
 
 const sidebarItems = computed(() => {
   return [
@@ -39,14 +40,25 @@ const ACTIONS = {
 }
 
 onBeforeMount(async () => {
+  // already logged in from Home
+  if (user.value)
+    return;
   const access_token = window.localStorage.getItem('access_token')
-  if (!access_token) return
-  loading.begin(ACTIONS.AUTH)
+  if (!access_token) {
+    console.log('access_token is missing. go to home.')
+    await nav.gotoHome()
+    return
+  }
+
+  console.log('login using access_token', access_token)
+
   try {
-    await userAPI.auth(access_token)
-    socketConnect(access_token)
+    loading.begin(ACTIONS.AUTH)
+    const {token} = await userAPI.auth(access_token)
+    socketConnect(token)
   } catch (e) {
-    notification.err(e, {duration: 0})
+    console.error(e)
+    await nav.gotoHome()
   } finally {
     loading.end(ACTIONS.AUTH)
   }

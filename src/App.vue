@@ -9,7 +9,6 @@
 </template>
 
 <script setup>
-import Test from './pages/Home.vue'
 </script>
 
 <style>
