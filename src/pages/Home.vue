@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="bc:#232f3e">
+    <div class="fix top-0 left-0 w-100 bc:#232f3e">
       <div class="fr ai-c jc-fe px-2 py-2 fg-8px">
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
         <TSpacer/>
@@ -8,6 +8,34 @@
         <TBtn save @click="createAnAccount">Create an account</TBtn>
       </div>
     </div>
+    <section class="w-100vw fc ai-c jc-c ta-c" style="height: 60vh">
+      <img class="mb-4" src="@/assets/images/logo.png" alt="Atlast's logo" style="width: 200px;"/>
+      <h2 class="mb-2">Unlock Simplicity, Embrace Affordability</h2>
+      <p>Your MongoDB Atlas Alternative for Seamless Database Hosting!</p>
+    </section>
+    <section class="fc ai-c jc-c" style="width: 80vw; margin: 0 auto">
+      <div class="grid gtc-1fr-1fr-1fr gg-20px fs-14px">
+        <div class="px-4 py-4 br-2" style="border: 1px solid #ddd">
+          <h3 class="mb-3 c:#18a00c fs-20px">Affordable pricing</h3>
+          <p class="mb-2">Ditch the high costs without compromising quality!</p>
+          <p class="mb-2">Atlast delivers top-notch features with unbeatable affordability,
+            ensuring you save big on database hosting without sacrificing performance.</p>
+        </div>
+        <div class="px-4 py-4 br-2" style="border: 1px solid #ddd">
+          <h3 class="mb-3 c:#18a00c fs-20px">User-friendly</h3>
+          <p class="mb-2">Say goodbye to complexity!</p>
+          <p class="mb-2">Our solution brings you a user-friendly experience that's as intuitive as it is powerful.</p>
+          <p class="mb-2">Enjoy hassle-free database management, simplified for your success.</p>
+        </div>
+        <div class="px-4 py-4 br-2" style="border: 1px solid #ddd">
+          <h3 class="mb-3 c:#18a00c fs-20px">Useful, robust features</h3>
+          <p class="mb-2">Experience the next level of database hosting!</p>
+          <p class="mb-2">Atlast not only simplifies but enhances, offering robust features that elevate your
+             database management to new heights.</p>
+          <p class="mb-2">Unleash the power of innovation with confidence.</p>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
