@@ -8,7 +8,7 @@
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
       </template>
       <template #sidebar-footer>
-        <t-btn @click="userAPI.signOut">Sign out</t-btn>
+        <t-btn @click="signOut">Sign out</t-btn>
       </template>
     </TDashboard>
   </TLoading>
@@ -63,4 +63,11 @@ onBeforeMount(async () => {
     loading.end(ACTIONS.AUTH)
   }
 })
+
+const signOut = async() => {
+    await userAPI.signOut();
+    await nav.gotoHome()
+}
+
+//TODO: check sign out function
 </script>

@@ -4,8 +4,6 @@
      <component :is="Component"/>
    </router-view>
  </TSystem>
-
-<!--  <Test/>-->
 </template>
 
 <script setup>
