@@ -8,10 +8,10 @@
         <div class="px-2">Atlast</div>
       </template>
       <template #sidebar-footer>
-        <t-btn @click="userAPI.signOut">Sign out</t-btn>
+        <t-btn @click="signOut">Sign out</t-btn>
       </template>
     </TDashboard>
-    <Auth v-else/>
+    <DialogSignIn v-else/>
   </TLoading>
 </template>
 <script setup lang="ts">
@@ -22,7 +22,8 @@ import {socketConnect} from '@/socket/socket';
 import Database from "../components/Database.vue";
 import Billing from "../components/Billing.vue";
 import Setting from "../components/Setting.vue";
-import Auth from "../components/Auth.vue";
+import DialogSignIn from "../components/DialogSignIn.vue"
+import {useRouter} from "vue-router";
 
 const sidebarItems = computed(() => {
   return [
@@ -51,4 +52,12 @@ onBeforeMount(async () => {
     loading.end(ACTIONS.AUTH)
   }
 })
+
+const router = useRouter()
+const signOut = async() => {
+    await userAPI.signOut();
+    await router.push({path: '/'})
+}
+
+//TODO: check lại function signOut
 </script>
