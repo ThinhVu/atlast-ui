@@ -126,9 +126,22 @@ db = await mongoose.connect('{{ connectionStr }}', {connectTimeoutMS: 10000})</p
           </div>
         </div>
 
-        <div class="fr ai-c">
+        <div class="mb-4 fc fg-4px">
+          <p class="mb-2"><b>Examples:</b></p>
           <p @click="openDbApiExample" class="clickable ml-2 fs-14px" style="text-decoration: underline">
-            You can find example here
+            - Basic example in NodeJS
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in ExpressJs (monolith)
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in HonoJS (serverless)
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in Ampt (serverless)
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in AWS Lambda (serverless)
           </p>
         </div>
       </template>
