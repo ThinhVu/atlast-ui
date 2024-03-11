@@ -3,6 +3,7 @@ import {ref, computed, inject, onMounted} from 'vue'
 import {copyToClipboard} from "@/utils/common";
 import {dbAPI} from "@/api";
 import TabHeader from "@/components/TabHeader.vue";
+import {MONGODB_HOSTS, MONGODB_REPL_NAME} from "@/constants";
 
 const props = defineProps({
   _id: String,
@@ -24,9 +25,20 @@ const tabs = [
 ]
 const tab = ref(TABS.CONN_STR)
 
-const DB_URL = '127.0.0.1:27017'
-const REPLICA_SET = 'rs0'
-const connectionStr = computed(() => `mongodb://${props.username}:${props.password}@${DB_URL}/${props.dbName}?authSource=${props.dbName}&retryWrites=true&w=majority&replicaSet=${REPLICA_SET}&readPreference=nearest`)
+const connectionStr = computed(() => {
+  const defaultConn = `mongodb://${props.username}:${props.password}@${MONGODB_HOSTS}/${props.dbName}?authSource=${props.dbName}`
+  if (MONGODB_HOSTS === "127.0.0.1") {
+    return defaultConn
+  }
+  const replicationOptions = {
+    replicaSet: MONGODB_REPL_NAME,
+    retryWrites: true,
+    w: 'majority',
+    readPreference: 'nearest'
+  }
+  const replStr = Object.entries(replicationOptions).map(([k, v]) => `${k}=${v}`).join('&')
+  return `${defaultConn}&${replStr}`
+})
 
 const apiKeys = ref([])
 async function loadApiKeys() {
@@ -94,7 +106,9 @@ db = await mongoose.connect('{{ connectionStr }}', {connectTimeoutMS: 10000})</p
           </div>
         </div>
         <div class="fr ai-c jc-sb">
-          <a href="https://github.com/ThinhVu/atlast-db-api-example">You can find usage example here</a>
+          <a href="https://github.com/ThinhVu/atlast-db-api-example" target="_blank">
+            You can find usage example here
+          </a>
           <TBtn @click="createApiKey" save>Create API Key</TBtn>
         </div>
       </template>

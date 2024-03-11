@@ -17,10 +17,7 @@ async function loadDbs() {
 
 async function showCreateDbDialog() {
   const dbName = await dialog.show(DialogDbCreate)
-  if (isEmpty(dbName)) {
-    notification.err('db name is empty')
-    return
-  }
+  if (!dbName) return
   try {
     await dbAPI.createDb(dbName);
     notification.info('Successfully created new database');
