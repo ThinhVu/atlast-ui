@@ -5,13 +5,12 @@
     </template>
     <TDashboard v-if="user" :sidebar-items="sidebarItems">
       <template #header>
-        <div class="px-2">Atlast</div>
+        <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
       </template>
       <template #sidebar-footer>
         <t-btn @click="signOut">Sign out</t-btn>
       </template>
     </TDashboard>
-    <DialogSignIn v-else/>
   </TLoading>
 </template>
 <script setup lang="ts">
@@ -19,11 +18,12 @@ import {inject, computed, onBeforeMount} from 'vue';
 import {userAPI} from '@/api';
 import {user} from '@/app-state';
 import {socketConnect} from '@/socket/socket';
-import Database from "../components/Database.vue";
-import Billing from "../components/Billing.vue";
-import Setting from "../components/Setting.vue";
-import DialogSignIn from "../components/DialogSignIn.vue"
-import {useRouter} from "vue-router";
+import Database from "@/components/Database.vue";
+import Billing from "@/components/Billing.vue";
+import Setting from "@/components/Setting.vue";
+import {useNavigation} from '@/composables/useNavigation'
+
+const nav = useNavigation()
 
 const sidebarItems = computed(() => {
   return [
@@ -40,24 +40,34 @@ const ACTIONS = {
 }
 
 onBeforeMount(async () => {
+  // already logged in from Home
+  if (user.value)
+    return;
   const access_token = window.localStorage.getItem('access_token')
-  if (!access_token) return
-  loading.begin(ACTIONS.AUTH)
+  if (!access_token) {
+    console.log('access_token is missing. go to home.')
+    await nav.gotoHome()
+    return
+  }
+
+  console.log('login using access_token', access_token)
+
   try {
-    await userAPI.auth(access_token)
-    socketConnect(access_token)
+    loading.begin(ACTIONS.AUTH)
+    const {token} = await userAPI.auth(access_token)
+    socketConnect(token)
   } catch (e) {
-    notification.err(e, {duration: 0})
+    console.error(e)
+    await nav.gotoHome()
   } finally {
     loading.end(ACTIONS.AUTH)
   }
 })
 
-const router = useRouter()
 const signOut = async() => {
     await userAPI.signOut();
-    await router.push({path: '/'})
+    await nav.gotoHome()
 }
 
-//TODO: check lại function signOut
+//TODO: check sign out function
 </script>

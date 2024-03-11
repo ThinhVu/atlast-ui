@@ -4,7 +4,6 @@ import router from '@/router';
 
 import Jinguji from 'jinguji';
 import 'uno.css';
-import './style/style.css'
 
 async function initApp() {
   const app = createApp(App);
