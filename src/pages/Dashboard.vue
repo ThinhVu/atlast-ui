@@ -27,9 +27,9 @@ const nav = useNavigation()
 
 const sidebarItems = computed(() => {
   return [
-    {title: 'Database', icon: 'fas fa-bar-chart@20px:#aaa', component: Database},
-    {title: 'Billing', icon: 'fas fa-key@20px:#aaa', component: Billing},
-    {title: 'Setting', icon: 'fas fa-folder@20px:#aaa', component: Setting}
+    {title: 'Database', icon: 'fas fa-database@16px:#aaa', component: Database},
+    {title: 'Billing', icon: 'fas fa-wallet@16px:#aaa', component: Billing},
+    {title: 'Setting', icon: 'fas fa-cog@16px:#aaa', component: Setting}
   ]
 })
 
