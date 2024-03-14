@@ -3,7 +3,7 @@ import {ref, computed, inject, onMounted} from 'vue'
 import {copyToClipboard} from "@/utils/common";
 import {dbAPI} from "@/api";
 import TabHeader from "@/components/TabHeader.vue";
-import {MONGODB_HOSTS, MONGODB_REPL_NAME} from "@/constants";
+import {API_URL, MONGODB_HOSTS, MONGODB_REPL_NAME} from "@/constants";
 
 const props = defineProps({
   _id: String,
@@ -60,6 +60,11 @@ async function disableApiKey(apiKey) {
 
 function copyApiKey(apiKey) {
   copyToClipboard(apiKey)
+  notification.info('Copied')
+}
+
+function openDbApiExample() {
+  window.open('https://github.com/ThinhVu/atlast-db-api-example', '_blank')
 }
 
 onMounted(loadApiKeys)
@@ -76,7 +81,7 @@ onMounted(loadApiKeys)
       <div v-if="tab === TABS.CONN_STR" class="fc fg-8px">
         <div>
           <p class="mb-1"><b>Connection string</b></p>
-          <TText v-model="connectionStr" multiLine :cols="80" :rows="4" class="f1"/>
+          <pre class="max-w-600px br-2 px-2 py-2 ovf-x-s fs-s" style="border: 1px solid #ddd">{{connectionStr}}</pre>
         </div>
 
         <div>
@@ -99,17 +104,45 @@ db = await mongoose.connect('{{ connectionStr }}', {connectTimeoutMS: 10000})</p
         </div>
       </div>
       <template v-else>
-        <div class="fc fg-4px mb-2">
-          <div v-for="apiKey in apiKeys" :key="apiKey" class="fr ai-c fg-4px">
-            <TText v-model="apiKey.key" class="f1"/>
-            <TBtn @click="copyApiKey(apiKey)">Copy</TBtn>
+        <div class="mb-4">
+          <p class="mb-2"><b>API URL:</b></p>
+          <p>
+            <TBtn @click="copyApiKey(`${API_URL}/run-db-cmd`)">
+              <TIcon>fas fa-copy@14:#888</TIcon>
+            </TBtn> {{`${API_URL}/run-db-cmd`}}
+          </p>
+        </div>
+
+        <div class="mb-4">
+          <p class="mb-2"><b>API Keys:</b></p>
+          <p class="mb-2"><TBtn @click="createApiKey" save>Create API Key</TBtn></p>
+          <div class="fc fg-4px mb-2">
+            <div v-for="apiKey in apiKeys" :key="apiKey" class="fr ai-c fg-4px">
+              <TBtn @click="copyApiKey(apiKey.key)">
+                <TIcon>fas fa-copy@14:#888</TIcon>
+              </TBtn>
+              <span class="f1">{{apiKey.key}}</span>
+            </div>
           </div>
         </div>
-        <div class="fr ai-c jc-sb">
-          <a href="https://github.com/ThinhVu/atlast-db-api-example" target="_blank">
-            You can find usage example here
-          </a>
-          <TBtn @click="createApiKey" save>Create API Key</TBtn>
+
+        <div class="mb-4 fc fg-4px">
+          <p class="mb-2"><b>Examples:</b></p>
+          <p @click="openDbApiExample" class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Basic example in NodeJS
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in ExpressJs (monolith)
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in HonoJS (serverless)
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in Ampt (serverless)
+          </p>
+          <p class="clickable ml-2 fs-14px" style="text-decoration: underline">
+            - Todo app in AWS Lambda (serverless)
+          </p>
         </div>
       </template>
     </div>

@@ -5,7 +5,7 @@
     </template>
     <TDashboard v-if="user" :sidebar-items="sidebarItems">
       <template #header>
-        <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
+        <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;" @click="nav.gotoHome()"/>
       </template>
       <template #sidebar-footer>
         <t-btn @click="signOut">Sign out</t-btn>
@@ -27,9 +27,9 @@ const nav = useNavigation()
 
 const sidebarItems = computed(() => {
   return [
-    {title: 'Database', icon: 'fas fa-bar-chart@20px:#aaa', component: Database},
-    {title: 'Billing', icon: 'fas fa-key@20px:#aaa', component: Billing},
-    {title: 'Setting', icon: 'fas fa-folder@20px:#aaa', component: Setting}
+    {title: 'Database', icon: 'fas fa-database@16px:#aaa', component: Database},
+    {title: 'Billing', icon: 'fas fa-wallet@16px:#aaa', component: Billing},
+    {title: 'Setting', icon: 'fas fa-cog@16px:#aaa', component: Setting}
   ]
 })
 
