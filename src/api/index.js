@@ -68,3 +68,10 @@ export const paymentAPI = {
   getPaymentHistory: async () => exec(axios.get(`${API_URL}/payment/history`, axiosOpts)),
   updatePaymentHistory: async (value) => exec(axios.post(`${API_URL}/payment/history`, {value}, axiosOpts)),
 }
+
+export const webhookAPI = {
+  listUserApi: async() => exec(axios.get(`${API_URL}/user-webhook`, axiosOpts)),
+  registerNewUserWebhook: async(data) => exec(axios.post(`${API_URL}/user-webhook`, {data}, axiosOpts)),
+  updateUserWebhook: async(webhookId, change) => exec(axios.post(`${API_URL}/user-webhook/${webhookId}`, {change}, axiosOpts)),
+  deleteUserWebhook: async(webhookId) => exec(axios.delete(`${API_URL}/user-webhook/${webhookId}`, axiosOpts)),
+}
