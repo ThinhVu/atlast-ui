@@ -70,8 +70,9 @@ export const paymentAPI = {
 }
 
 export const webhookAPI = {
-  listUserApi: async() => exec(axios.get(`${API_URL}/user-webhook`, axiosOpts)),
-  registerNewUserWebhook: async(data) => exec(axios.post(`${API_URL}/user-webhook`, {data}, axiosOpts)),
-  updateUserWebhook: async(webhookId, change) => exec(axios.post(`${API_URL}/user-webhook/${webhookId}`, {change}, axiosOpts)),
-  deleteUserWebhook: async(webhookId) => exec(axios.delete(`${API_URL}/user-webhook/${webhookId}`, axiosOpts)),
+  listDbWebHook: async() => exec(axios.get(`${API_URL}/db-webhook`, axiosOpts)),
+  createDbWebHook: async(data) => exec(axios.post(`${API_URL}/db-webhook`, data, axiosOpts)),
+  getOneDbWebHook: async(webhookId) => exec(axios.get(`${API_URL}/db-webhook/${webhookId}`, axiosOpts)),
+  updateDbWebHook: async(webhookId, change) => exec(axios.post(`${API_URL}/db-webhook/${webhookId}`, change, axiosOpts)),
+  deleteDbWebHook: async(webhookId) => exec(axios.delete(`${API_URL}/db-webhook/${webhookId}`, axiosOpts)),
 }

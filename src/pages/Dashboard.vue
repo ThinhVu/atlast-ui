@@ -21,6 +21,7 @@ import {socketConnect} from '@/socket/socket';
 import Database from "@/components/Database.vue";
 import Billing from "@/components/Billing.vue";
 import Setting from "@/components/Setting.vue";
+import WebHook from "@/components/WebHook.vue"
 import {useNavigation} from '@/composables/useNavigation'
 
 const nav = useNavigation()
@@ -29,7 +30,8 @@ const sidebarItems = computed(() => {
   return [
     {title: 'Database', icon: 'fas fa-database@16px:#aaa', component: Database},
     {title: 'Billing', icon: 'fas fa-wallet@16px:#aaa', component: Billing},
-    {title: 'Setting', icon: 'fas fa-cog@16px:#aaa', component: Setting}
+    {title: 'Setting', icon: 'fas fa-cog@16px:#aaa', component: Setting},
+    {title: 'WebHook', icon: 'fas fa-chain@16px:#aaa', component: WebHook}
   ]
 })
 
