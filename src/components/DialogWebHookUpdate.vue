@@ -25,8 +25,6 @@ import {webhookAPI} from "@/api";
 const emit = defineEmits(['close'])
 
 const {notification} = inject('TSystem')
-//
-const webhook = ref({})
 
 const props = defineProps({
   dbName: String,
@@ -38,7 +36,7 @@ const databaseName = ref(props.dbName)
 const collectionName = ref(props.colName)
 const toURL = ref(props.to)
 
-//TODO: ĐANG SỬA
+
 const updateDbWebHook = async(_id) => {
   const name = trim(databaseName.value)
   const col = trim(collectionName.value)

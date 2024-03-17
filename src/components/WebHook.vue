@@ -27,9 +27,8 @@ async function showCreateDbWebhookDialog() {
   }
 }
 
-//TODO: ĐANG SỬA showUpdateDbWebHook
 async function showUpdateDbWebHook(dbWebHook) {
-  const change = dialog.show({
+  const change = await dialog.show({
     component: DialogWebHookUpdate,
     data: dbWebHook
   })
