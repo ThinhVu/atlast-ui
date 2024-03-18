@@ -6,7 +6,8 @@
     </div>
 
     <div class="px-3 py-3 f1">
-      <t-text v-model="databaseName" class="w-100 mb-4" label="Database"/>
+      <p class="mb-1 fs-s c:#1F2328" style="user-select: none">Database name</p>
+      <pre class = "w-100 mb-4 t-text-input br-1 fs-s bc:#d0d7de" style="user-select: none">{{props.dbName}}</pre>
       <t-text v-model="collectionName" class="w-100 mb-4" label="Collection"/>
       <t-text v-model="toURL" class="w-100 mb-4" label="Webhook URL"/>
     </div>
@@ -32,20 +33,14 @@ const props = defineProps({
   to: String,
 })
 
-const databaseName = ref(props.dbName)
 const collectionName = ref(props.colName)
 const toURL = ref(props.to)
 
 
 const updateDbWebHook = async(_id) => {
-  const name = trim(databaseName.value)
   const col = trim(collectionName.value)
   const webhookURL = trim(toURL.value)
-  const change = {dbName: name, colName: col, to: webhookURL}
-  if (isEmpty(name)) {
-    notification.err('db name is empty')
-    return
-  }
+  const change = {dbName: props.dbName, colName: col, to: webhookURL}
   if (isEmpty(col)) {
     notification.err('collection name is empty')
     return
@@ -57,3 +52,12 @@ const updateDbWebHook = async(_id) => {
   emit('close', change)
 }
 </script>
+
+<style scoped>
+.t-text-input {
+    padding: 8px;
+    border: 1px solid #d0d7de;
+    box-shadow: inset 0 1px 0 rgba(208, 215, 222, 0.2);
+}
+
+</style>
