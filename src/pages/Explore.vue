@@ -59,7 +59,7 @@ async function getCols() {
 }
 
 const sidebarItems = computed(() => {
-    if (cols.value.length > 0) {
+    if (cols.value?.length > 0) {
         return cols.value.map((col) => ({
             title: String(col.name),
             icon: 'fas fa-th-large@16px:#aaa',
