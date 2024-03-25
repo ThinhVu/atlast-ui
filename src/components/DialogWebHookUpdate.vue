@@ -7,7 +7,7 @@
 
     <div class="px-3 py-3 f1">
       <p class="mb-1 fs-s c:#1F2328" style="user-select: none">Database name</p>
-      <pre class = "w-100 mb-4 t-text-input br-1 fs-s bc:#d0d7de" style="user-select: none">{{props.dbName}}</pre>
+      <pre class = "w-100 mb-4 t-text-input br-1 fs-s bc:#d0d7de" style="user-select: none">{{props.name}}</pre>
       <t-text v-model="collectionName" class="w-100 mb-4" label="Collection"/>
       <t-text v-model="toURL" class="w-100 mb-4" label="Webhook URL"/>
     </div>
@@ -28,7 +28,7 @@ const emit = defineEmits(['close'])
 const {notification} = inject('TSystem')
 
 const props = defineProps({
-  dbName: String,
+  name: String,
   colName: String,
   to: String,
 })
@@ -40,7 +40,7 @@ const toURL = ref(props.to)
 const updateDbWebHook = async(_id) => {
   const col = trim(collectionName.value)
   const webhookURL = trim(toURL.value)
-  const change = {dbName: props.dbName, colName: col, to: webhookURL}
+  const change = {name: props.name, colName: col, to: webhookURL}
   if (isEmpty(col)) {
     notification.err('collection name is empty')
     return

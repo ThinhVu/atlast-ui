@@ -26,13 +26,17 @@ const predefinedBuyValues = [10, 20, 50]
 const selectedValue = ref(predefinedBuyValues[0])
 
 const proceedBuy = async () => {
-  const amount = Number(selectedValue.value)
-    await paymentAPI.depositMoney(amount);
-    notification.info('Successful deposit payment')
-    console.log('proceedBuy', amount);
-    await paymentAPI.updatePaymentHistory(amount);
-    setTimeout(loadBalance, 500);
-    setTimeout(showPayment, 500);
+  // const amount = Number(selectedValue.value)
+  //   await paymentAPI.depositMoney(amount);
+  //   notification.info('Successful deposit payment')
+  //   console.log('proceedBuy', amount);
+  //   await paymentAPI.updatePaymentHistory(amount);
+  //   setTimeout(loadBalance, 500);
+  //   setTimeout(showPayment, 500);
+  await msgBox.show(
+    'Note',
+    'This function is not fully developed.\nPress Yes to exit.',
+    msgBox.Buttons.Ok)
 }
 
 </script>

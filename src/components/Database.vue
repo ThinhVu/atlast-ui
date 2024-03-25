@@ -5,11 +5,14 @@ import {dbAPI} from "@/api";
 import {ref, onMounted, inject} from "vue";
 import DialogDbConnect from "@/components/DialogDbConnect.vue";
 import DialogDbCreate from "@/components/DialogDbCreate.vue"
+import {useNavigation} from "@/composables/useNavigation";
 
 const {msgBox, dialog, notification} = inject('TSystem')
 
 const databases = ref([])
 onMounted(loadDbs)
+
+const nav = useNavigation()
 
 async function loadDbs() {
   databases.value = await dbAPI.getDbs()
@@ -34,8 +37,13 @@ function connect(db) {
   })
 }
 
-function explore(db) {
-  notification.info('Not implement yet!')
+async function explore(db) {
+  //notification.info('Not implement yet!')
+  try {
+    await nav.gotoExplore(db._id)
+  } catch(e) {
+    notification.err(e)
+  }
 }
 
 async function deleteDbConfirm(db) {

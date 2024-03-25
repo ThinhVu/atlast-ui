@@ -9,6 +9,9 @@ export function useNavigation() {
     },
     gotoHome() {
       return router.push({path: '/'})
+    },
+    gotoExplore(id) {
+      return router.push({path: `/explore/${id}`})
     }
   }
 }
