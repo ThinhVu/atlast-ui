@@ -66,7 +66,6 @@ async function deleteDbWebHook(dbWebHook) {
     <t-table class="w-100 max-h-400px">
       <thead>
       <tr>
-        <th class="z-index-1">Id</th>
         <th class="z-index-1">Db Name</th>
         <th class="z-index-1">Collection</th>
         <th class="z-index-1">WebHook URL</th>
@@ -76,7 +75,6 @@ async function deleteDbWebHook(dbWebHook) {
       </thead>
       <tbody>
       <tr v-for="dbWebHook in webhooks" :key="dbWebHook._id">
-        <td>{{dbWebHook._id}}</td>
         <td>{{dbWebHook.dbName}}</td>
         <td>
           {{dbWebHook.colName}}
