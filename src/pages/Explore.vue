@@ -3,8 +3,7 @@
     <template #loading>
       <TPulseBlock class="h-100vh w-100vw"/>
     </template>
-    <div v-if="user">
-    <TDashboard :sidebar-items="sidebarItems">
+    <TDashboard v-if="user" :sidebar-items="sidebarItems">
       <template #header>
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;" @click="nav.gotoHome()"/>
       </template>
@@ -18,7 +17,6 @@
         <t-btn @click="userAPI.signOut()">Sign out</t-btn>
       </template>
     </TDashboard>
-    </div>
   </TLoading>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <i class ='fas fa-link' @click="showWebhook"></i>
+  <i class ='fas fa-link as-fe' @click="showWebhook"></i>
   <Webhook :isWebHookShow="isWebHookShow" @close="isWebHookShow = false"/>
   <div style="height: 50px; background-color: rgba(0,0,0,0.2); color: #fff" class="fr ai-c jc-sb px-2">
     <p>this is collection</p>
@@ -17,3 +17,7 @@ function showWebhook() {
   isWebHookShow.value = true;
 }
 </script>
+
+<style scoped>
+
+</style>

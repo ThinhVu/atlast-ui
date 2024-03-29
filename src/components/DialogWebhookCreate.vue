@@ -23,21 +23,20 @@
 
 <script setup>
 import {isEmpty, trim} from "lodash-es";
-import {inject, onMounted, ref} from 'vue'
+import {computed, inject, onMounted, ref} from 'vue'
 import {dbAPI} from "@/api";
 
-const collections = ref([])
-const props = defineProps({
-  dbId: String
-})
+const cols = ref([])
+
+const props = defineProps({dbId: String})
 
 onMounted(getCols)
 
 async function getCols() {
-  collections.value = await dbAPI.getDbCollection(props.dbId);
+  cols.value = await dbAPI.getDbCollection(props.dbId);
 }
 
-
+const collections = computed(() => cols.value)
 
 const emit = defineEmits(['close'])
 
@@ -60,7 +59,6 @@ const createDbWebHook = () => {
   emit('close', data)
 }
 
-console.log(`get dbid: ${props.dbId}`)
 </script>
 
 <style scoped>

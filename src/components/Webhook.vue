@@ -1,6 +1,9 @@
 <template>
-  <div v-if="isWebHookShow" class="sidebar fe">
-    <i class="fas fa-times" @click="closeWebhook()"></i>
+  <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left fe">
+    <div class="fr as-fe mb-1">
+      <i class="fas fa-plus-circle round fs-25px mr-2" @click="showCreateWebHookDialog(dbId)"></i>
+      <i class="fa-solid fa-circle-xmark c:#e8485e fs-25px" @click="closeWebhook()"></i>
+    </div>
     <t-table class="w-100 max-h-400px">
       <thead>
       <tr>
@@ -34,7 +37,6 @@
       </tr>
       </tbody>
     </t-table>
-    <i class="fas fa-plus-circle round fs-25px" @click="showCreateWebHookDialog()"></i>
   </div>
 </template>
 <script setup>
@@ -69,27 +71,24 @@ async function getWebHooks() {
 }
 
 async function showCreateWebHookDialog(dbId) {
-  const data = await dialog.show({
-    component: DialogWebhookCreate,
-    data: dbId
-  })
+  const data = await dialog.show({component: DialogWebhookCreate, data: {dbId: dbId.toString()}})
   if (!data) return
   try {
     await webhookAPI.createDbWebHook(dbId, data);
-    notification.info('Successfully created new webhook');
     setTimeout(getWebHooks, 500);
+    notification.info('Successfully created new webhook');
   } catch (error) {
     console.error('Error creating new webhook:', error);
   }
 }
 
 async function showUpdateWebHookDialog(wh) {
-  const change = await dialog.show(DialogWebhookUpdate)
-  if (!change) return
+  const to = await dialog.show({component: DialogWebhookUpdate, data: wh})
+  if (!to) return
   try {
-    await webhookAPI.updateDbWebHook(wh._id, change);
-    notification.info(`Successfully update webhook id: ${wh._id}`)
+    await webhookAPI.updateDbWebHook(dbId, wh._id, to);
     setTimeout(getWebHooks, 500);
+    notification.info('Successfully update webhook')
   } catch (error) {
     console.error(`Error update webhook id: ${wh._id}`, error);
   }
@@ -114,8 +113,6 @@ async function deleteWebhookConfirm(wh) {
 <style>
 .sidebar {
     width: 1000px;
-    min-width: 150px;
-    border-left: 1px solid #d8dee4;
 }
 .round {
     color: #007bff; /* Đặt màu nền cho button */
@@ -125,4 +122,13 @@ async function deleteWebhookConfirm(wh) {
 .round:hover {
     color: #0056b3; /* Thay đổi màu nền khi di chuột qua button */
 }
+
+.transition-element {
+    transition: transform 0.5s ease;
+}
+
+.move-right-to-left {
+    transform: translateX(10%);
+}
+
 </style>
