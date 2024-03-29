@@ -1,35 +1,29 @@
 <template>
-<!--      <div>-->
-<!--        <div class="h-1000px w-40px br-4 fr" style = "border: 1px black">-->
-<!--          <div v-for="item in sidebarItems">-->
-<!--            {{item.icon}}-->
-<!--            {{item.title}}-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-  <TLoading>
+  <TLoading :action="ACTIONS.AUTH">
     <template #loading>
       <TPulseBlock class="h-100vh w-100vw"/>
     </template>
-    <TDashboard v-if="sidebarItems.length > 0" :sidebar-items="sidebarItems">
+    <div v-if="user">
+    <TDashboard :sidebar-items="sidebarItems">
       <template #header>
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;" @click="nav.gotoHome()"/>
       </template>
+      <template #sidebar-header>
+        <div class ="fr mt-2 mb-2 as-fe">
+          <p class="mr-15 fs-20px as-fs fw-15">Collections</p>
+          <i class="fas fa-plus-circle round fs-25px" @click="showCreateColDialog"></i>
+        </div>
+      </template>
       <template #sidebar-footer>
-        <button class="round-button" @click="showCreateColDialog">
-          <i class="fas fa-plus"></i>
-        </button>
         <t-btn @click="userAPI.signOut()">Sign out</t-btn>
       </template>
     </TDashboard>
-    <div v-else>
-      <p>Data is loading</p>
     </div>
   </TLoading>
 </template>
 
 <script setup lang="ts">
-import {inject, computed, ref} from 'vue';
+import {inject, computed, ref, onBeforeMount} from 'vue';
 import {userAPI} from '@/api';
 import {useNavigation} from '@/composables/useNavigation'
 import { useRoute } from 'vue-router'
@@ -37,6 +31,10 @@ import { dbAPI } from '../api'
 import {onMounted} from "vue";
 import Collection from '../components/Collection.vue'
 import DialogColCreate from "../components/DialogColCreate.vue";
+import {user} from '@/app-state';
+import {socketConnect} from '@/socket/socket';
+import {provide} from 'vue';
+
 
 
 const {dialog, loading, notification} = inject('TSystem')
@@ -46,27 +44,32 @@ const route = useRoute()
 const nav = useNavigation()
 
 const rs = ref([])
-const colName = ref()
 
-const cols = ref([])
 const dbId = route.params.id
 
-//onMounted(()=> getCols(dbId));
+provide('dbId', route.params.id)
+
+const ACTIONS = {
+    AUTH: 'authenticate'
+}
 onMounted(getCols);
 
+const cols = ref([])
 async function getCols() {
-    cols.value = await dbAPI.getDbCollection(dbId);
+    cols.value = await dbAPI.getDbCollection(route.params.id);
 }
+
+
 
 const sidebarItems = computed(() => {
     if (cols.value?.length > 0) {
         return cols.value.map((col) => ({
-            title: String(col.name),
+            title: col.name,
             icon: 'fas fa-th-large@16px:#aaa',
             component: Collection
         }))
     } else {
-        return []
+        return [{title:'',icon:'',component:Collection}]
     }
 })
 
@@ -82,27 +85,42 @@ async function showCreateColDialog() {
     }
 }
 
+onBeforeMount(async () => {
+    // already logged in from Home
+    if (user.value)
+        return;
+    const access_token = window.localStorage.getItem('access_token')
+    if (!access_token) {
+        console.log('access_token is missing. go to home.')
+        await nav.gotoHome()
+        return
+    }
+
+    console.log('login using access_token', access_token)
+
+    try {
+        loading.begin(ACTIONS.AUTH)
+        const {token} = await userAPI.auth(access_token)
+        socketConnect(token)
+    } catch (e) {
+        console.error(e)
+        await nav.gotoHome()
+    } finally {
+        loading.end(ACTIONS.AUTH)
+    }
+})
+
 </script>
 
 //TODO: check sign out function
 <style scoped>
-.round-button {
-    width: 50px; /* Đặt chiều rộng của button */
-    height: 50px; /* Đặt chiều cao của button */
-    border-radius: 50%; /* Đặt border-radius thành 50% để tạo hình tròn */
-    background-color: #007bff; /* Đặt màu nền cho button */
-    color: white; /* Đặt màu chữ cho button */
-    border: none; /* Loại bỏ border của button */
-    cursor: pointer; /* Đổi con trỏ chuột khi di chuyển qua button */
-    outline: none; /* Loại bỏ đường viền khi button được focus */
-    font-size: 24px; /* Đặt kích thước font chữ */
-    line-height: 50px; /* Canh giữa nội dung theo chiều dọc */
-    text-align: center; /* Canh giữa nội dung theo chiều ngang */
+.round {
+    color: #007bff; /* Đặt màu nền cho button */
 }
 
 /* Tùy chỉnh hover state */
-.round-button:hover {
-    background-color: #0056b3; /* Thay đổi màu nền khi di chuột qua button */
+.round:hover {
+    color: #0056b3; /* Thay đổi màu nền khi di chuột qua button */
 }
 </style>
 
