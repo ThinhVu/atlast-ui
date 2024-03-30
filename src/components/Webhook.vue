@@ -1,6 +1,6 @@
 <template>
   <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left fe">
-    <div class="fr as-fe mb-1">
+    <div class="fr as-fe ai-c mt-2 mb-2 ml-235">
       <i class="fas fa-plus-circle round fs-25px mr-2" @click="showCreateWebHookDialog(dbId)"></i>
       <i class="fa-solid fa-circle-xmark c:#e8485e fs-25px" @click="closeWebhook()"></i>
     </div>

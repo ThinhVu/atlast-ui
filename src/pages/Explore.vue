@@ -3,7 +3,7 @@
     <template #loading>
       <TPulseBlock class="h-100vh w-100vw"/>
     </template>
-    <TDashboard v-if="user" :sidebar-items="sidebarItems">
+    <TDashboard v-if="user && sidebarItems!==null" :sidebar-items="sidebarItems">
       <template #header>
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;" @click="nav.gotoHome()"/>
       </template>
@@ -46,18 +46,17 @@ const rs = ref([])
 const dbId = route.params.id
 
 provide('dbId', route.params.id)
+const cols = ref([])
 
 const ACTIONS = {
     AUTH: 'authenticate'
 }
 onMounted(getCols);
 
-const cols = ref([])
+
 async function getCols() {
     cols.value = await dbAPI.getDbCollection(route.params.id);
 }
-
-
 
 const sidebarItems = computed(() => {
     if (cols.value?.length > 0) {
@@ -67,7 +66,8 @@ const sidebarItems = computed(() => {
             component: Collection
         }))
     } else {
-        return [{title:'',icon:'',component:Collection}]
+        setTimeout(getCols,100)
+        return null
     }
 })
 
@@ -98,6 +98,7 @@ onBeforeMount(async () => {
 
     try {
         loading.begin(ACTIONS.AUTH)
+        console.log(`access_token: ${access_token}`)
         const {token} = await userAPI.auth(access_token)
         socketConnect(token)
     } catch (e) {

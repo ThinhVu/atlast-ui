@@ -60,7 +60,8 @@ export const dbAPI = {
   enableApiKey: async (dbId, apiKey) => exec(axios.put(`${API_URL}/api-key/${dbId}/${apiKey}`, {enable: true} ,axiosOpts)),
   disableApiKey: async (dbId, apiKey) => exec(axios.put(`${API_URL}/api-key/${dbId}/${apiKey}`, {enable: false} ,axiosOpts)),
   getDbCollection: async(dbId) => exec(axios.get(`${API_URL}/explore/${dbId}`,axiosOpts)),
-  createNewCollection: async(dbId, colName) => exec(axios.post(`${API_URL}/explore/${dbId}`,{colName} ,axiosOpts))
+  createNewCollection: async(dbId, colName) => exec(axios.post(`${API_URL}/explore/${dbId}`,{colName} ,axiosOpts)),
+  deleteCollection: async(dbId, colName) => exec(axios.delete(`${API_URL}/explore/${dbId}/${colName}`,axiosOpts))
 }
 
 export const paymentAPI = {
