@@ -16,7 +16,7 @@ dependencies:
     version: 1.11.5
   jinguji:
     specifier: github:ThinhVu/jinguji
-    version: github.com/ThinhVu/jinguji/bbbbf9a51fc1a5782ddb489538e2d6f96b56c64d
+    version: github.com/ThinhVu/jinguji/4e613c9f6be3ad292932dafd40a11ce0f0c4fbe3
   json-fn:
     specifier: ^1.1.1
     version: 1.1.1
@@ -63,7 +63,7 @@ devDependencies:
     version: 12.0.0
   unocss:
     specifier: ^0.52.4
-    version: 0.52.4(postcss@8.4.35)(vite@4.3.9)
+    version: 0.52.4(postcss@8.4.38)(vite@4.3.9)
   vite:
     specifier: ^4.3.9
     version: 4.3.9
@@ -810,7 +810,7 @@ packages:
       sirv: 2.0.3
     dev: true
 
-  /@unocss/postcss@0.52.4(postcss@8.4.35):
+  /@unocss/postcss@0.52.4(postcss@8.4.38):
     resolution: {integrity: sha512-czgtSpVoGloYLigWL9y4FfEqq6MLDE0M89GWx5L2wbwaR5jgTYvCus0r23dUxqbDRidAJ2zXD+QFCh3Gk0wvoQ==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -821,7 +821,7 @@ packages:
       css-tree: 2.3.1
       fast-glob: 3.2.12
       magic-string: 0.30.0
-      postcss: 8.4.35
+      postcss: 8.4.38
     dev: true
 
   /@unocss/preset-attributify@0.52.4:
@@ -2419,13 +2419,13 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /postcss@8.4.35:
-    resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==}
+  /postcss@8.4.38:
+    resolution: {integrity: sha512-Wglpdk03BSfXkHoQa3b/oulrotAkwrlLDRSOb9D0bN86FdRyE9lppSp33aHNPgBa0JKCoB+drFLZkQoRRYae5A==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
       picocolors: 1.0.0
-      source-map-js: 1.0.2
+      source-map-js: 1.2.0
     dev: true
 
   /process-nextick-args@2.0.1:
@@ -2657,6 +2657,11 @@ packages:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
 
+  /source-map-js@1.2.0:
+    resolution: {integrity: sha512-itJW8lvSA0TXEphiRoawsCksnlf8SyvmFzIhltqAHluXd88pkCd+cXJVHTDwdCr0IzwptSm035IHQktUu1QUMg==}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
   /source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
@@ -2858,7 +2863,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
-  /unocss@0.52.4(postcss@8.4.35)(vite@4.3.9):
+  /unocss@0.52.4(postcss@8.4.38)(vite@4.3.9):
     resolution: {integrity: sha512-EaXc398NWrTfxQBkYXXFLjAGMDL7lAlP3QRPE59uQCwlKxZ52WZs7L+ekhe6ZTIRyDGuNVEBcndy+9tSVLbN8A==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -2871,7 +2876,7 @@ packages:
       '@unocss/cli': 0.52.4
       '@unocss/core': 0.52.4
       '@unocss/extractor-arbitrary-variants': 0.52.4
-      '@unocss/postcss': 0.52.4(postcss@8.4.35)
+      '@unocss/postcss': 0.52.4(postcss@8.4.38)
       '@unocss/preset-attributify': 0.52.4
       '@unocss/preset-icons': 0.52.4
       '@unocss/preset-mini': 0.52.4
@@ -3101,8 +3106,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/ThinhVu/jinguji/bbbbf9a51fc1a5782ddb489538e2d6f96b56c64d:
-    resolution: {tarball: https://codeload.github.com/ThinhVu/jinguji/tar.gz/bbbbf9a51fc1a5782ddb489538e2d6f96b56c64d}
+  github.com/ThinhVu/jinguji/4e613c9f6be3ad292932dafd40a11ce0f0c4fbe3:
+    resolution: {tarball: https://codeload.github.com/ThinhVu/jinguji/tar.gz/4e613c9f6be3ad292932dafd40a11ce0f0c4fbe3}
     name: jinguji
     version: 1.0.12
     dependencies:

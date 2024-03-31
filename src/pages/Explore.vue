@@ -3,14 +3,16 @@
     <template #loading>
       <TPulseBlock class="h-100vh w-100vw"/>
     </template>
-    <TDashboard v-if="user && sidebarItems!==null" :sidebar-items="sidebarItems">
+    <TDashboard v-if="user && sidebarItems !== null" :sidebar-items="sidebarItems">
       <template #header>
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;" @click="nav.gotoHome()"/>
       </template>
       <template #sidebar-header>
-        <div class ="fr mt-2 mb-2 as-fe">
-          <p class="mr-15 fs-20px as-fs fw-15">Collections</p>
-          <i class="fas fa-plus-circle round fs-25px" @click="showCreateColDialog"></i>
+        <div class="fr mt-2 mb-2 ai-c jc-sb">
+          <p class="fs-20px fw-15">Collections</p>
+          <t-btn primary @click="showCreateColDialog">
+            Add
+          </t-btn>
         </div>
       </template>
       <template #sidebar-footer>
@@ -24,16 +26,14 @@
 import {inject, computed, ref, onBeforeMount} from 'vue';
 import {userAPI} from '@/api';
 import {useNavigation} from '@/composables/useNavigation'
-import { useRoute } from 'vue-router'
-import { dbAPI } from '../api'
+import {useRoute} from 'vue-router'
+import {dbAPI} from '../api'
 import {onMounted} from "vue";
 import Collection from '../components/Collection.vue'
 import DialogColCreate from "../components/DialogColCreate.vue";
 import {user} from '@/app-state';
 import {socketConnect} from '@/socket/socket';
 import {provide} from 'vue';
-
-
 
 const {dialog, loading, notification} = inject('TSystem')
 
@@ -49,77 +49,65 @@ provide('dbId', route.params.id)
 const cols = ref([])
 
 const ACTIONS = {
-    AUTH: 'authenticate'
+  AUTH: 'authenticate'
 }
 onMounted(getCols);
 
 
 async function getCols() {
-    cols.value = await dbAPI.getDbCollection(route.params.id);
+  cols.value = await dbAPI.getDbCollection(route.params.id);
 }
 
 const sidebarItems = computed(() => {
-    if (cols.value?.length > 0) {
-        return cols.value.map((col) => ({
-            title: col.name,
-            icon: 'fas fa-th-large@16px:#aaa',
-            component: Collection
-        }))
-    } else {
-        setTimeout(getCols,100)
-        return null
-    }
+  if (cols.value?.length > 0) {
+    return cols.value.map((col) => ({
+      title: col.name,
+      icon: 'fas fa-th-large@16px:#aaa',
+      component: Collection
+    }))
+  } else {
+    setTimeout(getCols, 100)
+    return null
+  }
 })
 
 async function showCreateColDialog() {
-    const colName = await dialog.show(DialogColCreate)
-    if (!colName) return
-    try {
-        await dbAPI.createNewCollection(dbId, colName);
-        setTimeout(getCols, 500);
-        notification.info(`Successfully created new collection: ${colName}`);
-    } catch (error) {
-        console.error('Error creating new collection:', error);
-    }
+  const colName = await dialog.show(DialogColCreate)
+  if (!colName) return
+  try {
+    await dbAPI.createNewCollection(dbId, colName);
+    setTimeout(getCols, 500);
+    notification.info(`Successfully created new collection: ${colName}`);
+  } catch (error) {
+    console.error('Error creating new collection:', error);
+  }
 }
 
 onBeforeMount(async () => {
-    // already logged in from Home
-    if (user.value)
-        return;
-    const access_token = window.localStorage.getItem('access_token')
-    if (!access_token) {
-        console.log('access_token is missing. go to home.')
-        await nav.gotoHome()
-        return
-    }
+  // already logged in from Home
+  if (user.value)
+    return;
 
-    console.log('login using access_token', access_token)
+  const access_token = window.localStorage.getItem('access_token')
+  if (!access_token) {
+    console.log('access_token is missing. go to home.')
+    await nav.gotoHome()
+    return
+  }
 
-    try {
-        loading.begin(ACTIONS.AUTH)
-        console.log(`access_token: ${access_token}`)
-        const {token} = await userAPI.auth(access_token)
-        socketConnect(token)
-    } catch (e) {
-        console.error(e)
-        await nav.gotoHome()
-    } finally {
-        loading.end(ACTIONS.AUTH)
-    }
+  console.log('login using access_token', access_token)
+
+  try {
+    loading.begin(ACTIONS.AUTH)
+    console.log(`access_token: ${access_token}`)
+    const {token} = await userAPI.auth(access_token)
+    socketConnect(token)
+  } catch (e) {
+    console.error(e)
+    await nav.gotoHome()
+  } finally {
+    loading.end(ACTIONS.AUTH)
+  }
 })
 
 </script>
-
-//TODO: check sign out function
-<style scoped>
-.round {
-    color: #007bff; /* Đặt màu nền cho button */
-}
-
-/* Tùy chỉnh hover state */
-.round:hover {
-    color: #0056b3; /* Thay đổi màu nền khi di chuột qua button */
-}
-</style>
-
