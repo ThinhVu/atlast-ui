@@ -6,7 +6,7 @@
     </div>
 
     <div class="px-3 py-3 f1">
-    <t-text v-model="dbName" class="w-100" label="Input your database name" placeholder="e.g: inventory"/>
+    <t-text v-model="name" class="w-100" label="Input your database name" placeholder="e.g: inventory"/>
     </div>
     <div class="px-3 py-1 fr ai-c jc-fe fg-4px">
       <TBtn @click="emit('close')">Cancel</TBtn>
@@ -22,13 +22,13 @@ const emit = defineEmits(['close'])
 
 const {notification} = inject('TSystem')
 
-const dbName = ref('')
+const name = ref('')
 const createDb = () => {
-  const name = trim(dbName.value)
-  if (isEmpty(name)) {
+  const alias = trim(name.value)
+  if (isEmpty(alias)) {
     notification.err('db name is empty')
     return
   }
-  emit('close', name)
+  emit('close', alias)
 }
 </script>

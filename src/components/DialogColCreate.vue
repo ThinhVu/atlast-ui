@@ -1,7 +1,7 @@
 <template>
   <div class="bc:white pb-3 mx-a min-w-400px fc br-2 ovf-h">
     <div class="fr ai-c" style="border-bottom: 1px solid #ddd">
-      <p class="px-4 py-4 f1">Create a new database</p>
+      <p class="px-4 py-4 f1">Create a new collection</p>
       <TIcon class="mr-3 clickable" @click="emit('close')">fa fa-times</TIcon>
     </div>
 

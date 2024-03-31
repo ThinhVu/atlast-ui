@@ -19,10 +19,10 @@ async function loadDbs() {
 }
 
 async function showCreateDbDialog() {
-  const dbName = await dialog.show(DialogDbCreate)
-  if (!dbName) return
+  const alias = await dialog.show(DialogDbCreate)
+  if (!alias) return
   try {
-    await dbAPI.createDb(dbName);
+    await dbAPI.createDb(alias);
     notification.info('Successfully created new database');
     setTimeout(loadDbs, 500);
   } catch (error) {
@@ -79,7 +79,7 @@ async function deleteDbConfirm(db) {
       </thead>
       <tbody>
       <tr v-for="db in databases" :key="db._id">
-        <td>{{db.name}}</td>
+        <td>{{db.alias}}</td>
         <td>{{db.dbName}}</td>
         <td>
           {{db.sizeInGB}}
