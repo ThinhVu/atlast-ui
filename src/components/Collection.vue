@@ -25,9 +25,14 @@
 
     <!-- Editor -->
     <div v-if="showEditor" class="abs top-0 right-0 w-400px h-100">
-      <Webhook class="mb-2 mt-2"/>
+<!--      <Webhook class="mb-2 mt-2"/>-->
       <DocumentEditor :document="selectingDoc"/>
     </div>
+    <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-500px h-100 bc:#FFFFFF">
+      <Webhook :isWebHookShow="isWebHookShow" @close="isWebHookShow=false"/>
+<!--      <DocumentEditor :document="selectingDoc"/>-->
+    </div>
+    <div v-else></div>
   </div>
 </template>
 <script setup>
@@ -42,7 +47,8 @@ const paging = reactive({
 })
 
 const isWebHookShow=ref(false)
-const showEditor = ref(true)
+// const showEditor = ref(true)
+const showEditor = ref(false)
 const selectingDoc = ref()
 
 const setSelectingDoc = (doc) => {
@@ -64,9 +70,11 @@ const documents = [
 ]
 
 function showWebhook() {
-  showEditor.value = !showEditor.value;
+  // showEditor.value = !showEditor.value;
+  showEditor.value = false;
   isWebHookShow.value = true;
 }
+
 </script>
 
 <style scoped>

@@ -1,33 +1,27 @@
 <template>
-  <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left fe">
-    <div class="fr as-fe ai-c mt-2 mb-2 ml-235">
+  <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left fs">
+    <div class="fr as-fs ai-c mt-2 mb-2 ml-85">
       <i class="fas fa-plus-circle round fs-25px mr-2" @click="showCreateWebHookDialog(dbId)"></i>
       <i class="fa-solid fa-circle-xmark c:#e8485e fs-25px" @click="closeWebhook()"></i>
     </div>
     <t-table class="w-100 max-h-400px">
       <thead>
       <tr>
-        <th class="z-index-1">Db Name</th>
-        <th class="z-index-1">Collection Name</th>
+        <th class="z-index-1">Collection</th>
         <th class="z-index-1">Webhook URL</th>
-        <th class="z-index-1">Create At</th>
         <th class="w-10px z-index-1">Action</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="wh in webhooks" :key="wh._id">
-        <td>{{wh.dbName}}</td>
         <td>{{wh.colName}}</td>
         <td>
           {{wh.to}}
         </td>
         <td>
-          {{dayjs(wh.createDt).format('YYYY-MM-DD HH:mm:ss')}}
-        </td>
-        <td>
           <div class="fr ai-c fg-4px">
-            <t-btn secondary class="fn-btn" @click="showUpdateWebHookDialog(wh)">
-              Change WebHook
+            <t-btn save class="fn-btn" @click="showUpdateWebHookDialog(wh)">
+              Modify
             </t-btn>
             <t-btn delete class="fn-btn" @click="deleteWebhookConfirm(wh)">
               Remove
@@ -41,7 +35,6 @@
 </template>
 <script setup>
 import {webhookAPI} from '@/api'
-import dayjs from "dayjs";
 import {ref, onMounted, inject} from 'vue';
 import DialogWebhookCreate from "@/components/DialogWebhookCreate.vue";
 import DialogWebhookUpdate from "@/components/DialogWebHookUpdate.vue"
@@ -104,7 +97,7 @@ async function deleteWebhookConfirm(wh) {
     if (rs === msgBox.Results.yes) {
       await webhookAPI.deleteDbWebHook(wh._id)
       setTimeout(getWebHooks, 1000)
-      notification.info('Db deleted')
+      notification.info('Webhook deleted')
     }
 }
 
@@ -112,10 +105,10 @@ async function deleteWebhookConfirm(wh) {
 
 <style>
 .sidebar {
-    width: 1000px;
+    width: 400px;
 }
 .round {
-    color: #007bff; /* Đặt màu nền cho button */
+    color: #007bff;
 }
 
 /* Tùy chỉnh hover state */
