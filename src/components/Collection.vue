@@ -26,7 +26,7 @@
     <!-- Editor -->
     <div v-if="showEditor" class="abs top-0 right-0 w-400px h-100">
 <!--      <Webhook class="mb-2 mt-2"/>-->
-      <DocumentEditor :document="selectingDoc"/>
+      <DocumentEditor :document="selectingDoc" @close="closeDocEdit()"/>
     </div>
     <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-500px h-100 bc:#FFFFFF">
       <Webhook :isWebHookShow="isWebHookShow" @close="isWebHookShow=false"/>
@@ -73,6 +73,10 @@ function showWebhook() {
   // showEditor.value = !showEditor.value;
   showEditor.value = false;
   isWebHookShow.value = true;
+}
+
+function closeDocEdit() {
+  showEditor.value = false;
 }
 
 </script>
