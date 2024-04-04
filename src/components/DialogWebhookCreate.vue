@@ -5,14 +5,7 @@
       <TIcon class="mr-3 clickable" @click="emit('close')">fa fa-times</TIcon>
     </div>
     <div class="px-3 py-3 f1 t-text rel">
-      <p class="mb-1 fs-s c:#1F2328" style="user-select: none">Collection name</p>
-      <select v-model="colName" class="w-100 mb-4 br-1" style="border-color: #d0d7de">
-        <option class = "single-line t-text-input" disabled value="">Please select one</option>
-        <option v-for="collection in collections" :value="collection.name" class="single-line t-text-input">
-          {{ collection.name }}
-        </option>
-      </select>
-      <t-text v-model="to" class="w-100 mb-4" label="Webhook URL" placeholder=""/>
+      <t-text v-model="webhookURL" class="w-100 mb-4" label="Webhook URL" placeholder=""/>
     </div>
     <div class="px-3 py-1 fr ai-c jc-fe fg-4px">
       <TBtn @click="emit('close')">Cancel</TBtn>
@@ -23,52 +16,20 @@
 
 <script setup>
 import {isEmpty, trim} from "lodash-es";
-import {computed, inject, onMounted, ref} from 'vue'
-import {dbAPI} from "@/api";
-
-const cols = ref([])
-
-const props = defineProps({dbId: String})
-
-onMounted(getCols)
-
-async function getCols() {
-  cols.value = await dbAPI.getDbCollection(props.dbId);
-}
-
-const collections = computed(() => cols.value)
+import {inject, ref} from 'vue'
 
 const emit = defineEmits(['close'])
 
 const {notification} = inject('TSystem')
 
-const colName = ref('')
-const to = ref('')
+const webhookURL = ref('')
 const createDbWebHook = () => {
-  const col = colName.value
-  const webhookURL = trim(to.value)
-  const data = {colName: col, to: webhookURL}
-  if (isEmpty(col)) {
+  const to = trim(webhookURL.value)
+  if (isEmpty(to)) {
     notification.err('collection name is empty')
     return
   }
-  if (isEmpty(webhookURL)) {
-    notification.err('collection name is empty')
-    return
-  }
-  emit('close', data)
+  emit('close', to)
 }
 
 </script>
-
-<style scoped>
-.t-text-input {
-    padding: 8px;
-    border: 1px solid #d0d7de;
-    box-shadow: inset 0 1px 0 rgba(208,215,222,0.2);
-}
-
-.single-line {
-    width: 100%;
-}
-</style>

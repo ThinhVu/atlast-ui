@@ -24,8 +24,6 @@ const emit = defineEmits(['close'])
 const {notification} = inject('TSystem')
 
 const props = defineProps({
-  dbName: String,
-  colName: String,
   to: String,
 })
 

@@ -1,8 +1,10 @@
 <template>
-  <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left fs">
-    <div class="fr as-fs ai-c mt-2 mb-2 ml-85">
-      <i class="fas fa-plus-circle round fs-25px mr-2" @click="showCreateWebHookDialog(dbId)"></i>
-      <i class="fa-solid fa-circle-xmark c:#e8485e fs-25px" @click="closeWebhook()"></i>
+  <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left">
+    <div class="fr mt-2 mb-2 ai-c jc-sb">
+      <p class="mr-10 as-fs fs-20px fw-7">Web Hook</p>
+<!--      <i class="fas fa-plus-circle round fs-25px as-fe" @click="showCreateWebHookDialog()"></i>-->
+      <t-btn @click="showCreateWebHookDialog()" primary>Add</t-btn>
+
     </div>
     <t-table class="w-100 max-h-400px">
       <thead>
@@ -43,6 +45,7 @@ const {msgBox, dialog, notification} = inject('TSystem')
 
 const props = defineProps({
  isWebHookShow: Boolean,
+ colName: String,
 })
 
 
@@ -52,6 +55,7 @@ const closeWebhook = () => {
   emitClose('close');
 };
 
+const colName = props.colName
 
 const dbId = inject('dbId')
 
@@ -60,14 +64,14 @@ const webhooks = ref([])
 
 onMounted(getWebHooks)
 async function getWebHooks() {
-  webhooks.value = await webhookAPI.listDbWebHook(dbId)
+  webhooks.value = await webhookAPI.listDbWebHook(dbId, colName)
 }
 
-async function showCreateWebHookDialog(dbId) {
-  const data = await dialog.show({component: DialogWebhookCreate, data: {dbId: dbId.toString()}})
-  if (!data) return
+async function showCreateWebHookDialog() {
+  const to = await dialog.show(DialogWebhookCreate)
+  if (!to) return
   try {
-    await webhookAPI.createDbWebHook(dbId, data);
+    await webhookAPI.createDbWebHook(dbId, colName, to);
     setTimeout(getWebHooks, 500);
     notification.info('Successfully created new webhook');
   } catch (error) {
@@ -79,7 +83,7 @@ async function showUpdateWebHookDialog(wh) {
   const to = await dialog.show({component: DialogWebhookUpdate, data: wh})
   if (!to) return
   try {
-    await webhookAPI.updateDbWebHook(dbId, wh._id, to);
+    await webhookAPI.updateDbWebHook(dbId, colName, wh._id, to);
     setTimeout(getWebHooks, 500);
     notification.info('Successfully update webhook')
   } catch (error) {
@@ -101,6 +105,8 @@ async function deleteWebhookConfirm(wh) {
     }
 }
 
+
+console.log(`colName: ${props.colName}`)
 </script>
 
 <style>
@@ -111,17 +117,12 @@ async function deleteWebhookConfirm(wh) {
     color: #007bff;
 }
 
-/* Tùy chỉnh hover state */
 .round:hover {
-    color: #0056b3; /* Thay đổi màu nền khi di chuột qua button */
+    color: #0056b3;
 }
 
 .transition-element {
     transition: transform 0.5s ease;
-}
-
-.move-right-to-left {
-    transform: translateX(10%);
 }
 
 </style>
