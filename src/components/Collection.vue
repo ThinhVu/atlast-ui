@@ -3,6 +3,9 @@
     <t-btn @click="showWebhook">
       <t-icon>fas fa-link@16px</t-icon>
     </t-btn>
+    <t-btn @click="createNewDoc">
+      <t-icon>fas fa-plus@16px</t-icon>
+    </t-btn>
   </div>
   <div class="fr w-100 h-100 rel">
     <!-- Data table -->
@@ -30,12 +33,10 @@
 
     <!-- Editor -->
     <div v-if="showEditor" class="abs top-0 right-0 w-400px h-100" style="border-left: 1px solid #ccc">
-<!--      <Webhook class="mb-2 mt-2"/>-->
       <DocumentEditor :document="selectingDoc" @close="closeDocEdit()"/>
     </div>
     <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-500px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
       <Webhook :isWebHookShow="isWebHookShow" :colName="colName" class="mt-2"/>
-<!--      <DocumentEditor :document="selectingDoc"/>-->
     </div>
     <div v-else></div>
   </div>
@@ -44,8 +45,10 @@
 import {ref, reactive, inject, onMounted} from 'vue';
 import Webhook from '@/components/Webhook.vue'
 import DocumentEditor from "@/components/DocumentEditor.vue";
+import DialogDocCreate from "@/components/DialogDocCreate.vue"
 import {colAPI} from "@/api"
 
+const {msgBox, dialog, notification} = inject('TSystem')
 
 const dbId = inject('dbId')
 const props = defineProps(['title'])
@@ -58,7 +61,7 @@ const paging = reactive({
   totalItems: 200
 })
 
-const documents = ref([])
+// const documents = ref([])
 
 const isWebHookShow=ref(false)
 // const showEditor = ref(true)
@@ -75,23 +78,23 @@ async function listDocs() {
   documents.value = await colAPI.getDocs(dbId, colName, paging.page)
 }
 
-setTimeout(listDocs,100)
 
-// const documents = [
-//   {id: 1, name: 'Product 1', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 2, name: 'Product 2', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 3, name: 'Product 3', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 4, name: 'Product 4', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 5, name: 'Product 5', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 6, name: 'Product 6', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 7, name: 'Product 7', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 8, name: 'Product 8', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 9, name: 'Product 9', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 10, name: 'Product 10', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 11, name: 'Product 11', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 12, name: 'Product 12', price: 10, manufactureDate: '2024-01-01'},
-//   {id: 13, name: 'Product 13', price: 10, manufactureDate: '2024-01-01'},
-// ]
+
+const documents = [
+  {id: 1, name: 'Product 1', price: 10, manufactureDate: '2024-01-01'},
+  {id: 2, name: 'Product 2', price: 10, manufactureDate: '2024-01-01'},
+  {id: 3, name: 'Product 3', price: 10, manufactureDate: '2024-01-01'},
+  {id: 4, name: 'Product 4', price: 10, manufactureDate: '2024-01-01'},
+  {id: 5, name: 'Product 5', price: 10, manufactureDate: '2024-01-01'},
+  {id: 6, name: 'Product 6', price: 10, manufactureDate: '2024-01-01'},
+  {id: 7, name: 'Product 7', price: 10, manufactureDate: '2024-01-01'},
+  {id: 8, name: 'Product 8', price: 10, manufactureDate: '2024-01-01'},
+  {id: 9, name: 'Product 9', price: 10, manufactureDate: '2024-01-01'},
+  {id: 10, name: 'Product 10', price: 10, manufactureDate: '2024-01-01'},
+  {id: 11, name: 'Product 11', price: 10, manufactureDate: '2024-01-01'},
+  {id: 12, name: 'Product 12', price: 10, manufactureDate: '2024-01-01'},
+  {id: 13, name: 'Product 13', price: 10, manufactureDate: '2024-01-01'},
+]
 
 function showWebhook() {
   // showEditor.value = !showEditor.value;
@@ -101,6 +104,18 @@ function showWebhook() {
 
 function closeDocEdit() {
   showEditor.value = false;
+}
+
+async function createNewDoc() {
+  const doc = await dialog.show(DialogDocCreate)
+  if (!doc) return
+  const col = colName.toString();
+  try {
+    await colAPI.createNewDoc(dbId, col, doc)
+    notification.info('Successfully creating new doc')
+  } catch (error) {
+    console.error(`Error creating new document`, error);
+  }
 }
 
 </script>
