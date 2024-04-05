@@ -81,8 +81,9 @@ export const webhookAPI = {
 
 
 export const colAPI = {
+  countDocs: async (dbId, col) => exec(axios.get(`${API_URL}/user-collection/${dbId}/${col}`, axiosOpts)),
   getDocs: async(dbId, col, page) => exec(axios.get(`${API_URL}/user-collection/${dbId}/${col}/${page}`, axiosOpts)),
   createNewDoc: async(dbId, col, doc) => exec(axios.post(`${API_URL}/user-collection/${dbId}/${col}`, doc, axiosOpts)),
   updateDoc: async(dbId, col, id, doc) => exec(axios.post(`${API_URL}/user-collection/${dbId}/${col}/${id}`, doc, axiosOpts)),
-  deleteDoc: async(dbId, col, id) => exec(axios.delete(`${API_URL}/user-collection/${dbId}/${col}/${id}`, axiosOpts))
+  deleteDoc: async(dbId, col, id) => exec(axios.delete(`${API_URL}/user-collection/${dbId}/${col}/${id}`, axiosOpts)),
 }

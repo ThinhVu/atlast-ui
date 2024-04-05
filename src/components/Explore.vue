@@ -24,7 +24,7 @@
             <t-btn @click="userAPI.signOut()">Sign out</t-btn>
           </div>
           <div class="f1 ovf-h">
-            <Collection :db-id="dbId" :title="sidebarItems[selectedSidebarItemIdx].title"/>
+            <Collection :db-id="dbId" :name="sidebarItems[selectedSidebarItemIdx].title"/>
           </div>
         </div>
       </t-page-content>
