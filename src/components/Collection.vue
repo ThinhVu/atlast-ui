@@ -1,12 +1,12 @@
 <template>
   <div class="fr ai-c fg-8px px-2 py-2" style="border-bottom: 1px solid #ccc">
-    <span style="text-transform: uppercase">{{name}}</span>
+    <span style="text-transform: uppercase">{{ name }}</span>
     <div class="f1"></div>
-    <t-btn @click="showWebhook">
-      <t-icon>fas fa-link@16px</t-icon>
-    </t-btn>
     <t-btn @click="createNewDoc">
       <t-icon>fas fa-plus@16px</t-icon>
+    </t-btn>
+    <t-btn @click="showWebhook">
+      <t-icon>fas fa-link@16px</t-icon>
     </t-btn>
   </div>
   <div class="fr w-100 h-100 rel">
@@ -64,7 +64,7 @@ const props = defineProps({
   dbId: String
 })
 
-const {loading, msgBox, dialog} = inject('TSystem');
+const {loading, msgBox, dialog, notification} = inject('TSystem');
 const paging = reactive({
   page: 1,
   itemsPerPage: 10,
@@ -127,7 +127,9 @@ async function createNewDoc() {
   if (!doc) return
   const col = props.name.toString();
   try {
-    await colAPI.createNewDoc(props.dbId, col, doc)
+    await colAPI.createNewDoc(props.dbId, col, doc);
+    setTimeout(listDocs,500);
+    setTimeout(countDocs, 500);
     notification.info('Successfully creating new doc')
   } catch (error) {
     console.error(`Error creating new document`, error);

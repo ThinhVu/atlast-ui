@@ -62,7 +62,6 @@ const sidebarItems = computed(() => {
     return cols.value.map((col) => ({
       title: col.name,
       icon: 'fas fa-th-large@16px:#aaa',
-      //component: Collection,
     }))
   } else {
     setTimeout(getCols, 100)
