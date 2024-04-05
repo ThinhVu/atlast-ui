@@ -44,7 +44,7 @@ import {inject} from 'vue'
 import {useNavigation} from '@/composables/useNavigation'
 import {userAPI} from "@/api";
 import {socketConnect} from "@/socket/socket";
-import Auth from "@/components/Auth.vue";
+import AuthDialog from "@/components/AuthDialog.vue";
 
 const {dialog, notification} = inject('TSystem')
 const nav = useNavigation()
@@ -66,14 +66,14 @@ async function signIn() {
 
   console.log('show sign-in dialog')
   dialog.show({
-    component: Auth,
+    component: AuthDialog,
     data: {mode: 'signIn'}
   })
 }
 
 const createAnAccount = () => {
   dialog.show({
-    component: Auth,
+    component: AuthDialog,
     data: {mode: 'signUp'}
   })
 }
