@@ -4,6 +4,9 @@
     <t-btn @click="showWebhook">
       <t-icon>fas fa-link@16px</t-icon>
     </t-btn>
+    <t-btn @click="createNewDoc">
+      <t-icon>fas fa-plus@16px</t-icon>
+    </t-btn>
   </div>
   <div class="fr w-100 h-100 rel">
     <div class="f1 fc fg-8px">
@@ -39,12 +42,10 @@
 
     <!-- Editor -->
     <div v-if="showEditor" class="abs top-0 right-0 w-400px h-100" style="border-left: 1px solid #ccc">
-<!--      <Webhook class="mb-2 mt-2"/>-->
       <DocumentEditor :document="selectingDoc" @close="closeDocEdit()"/>
     </div>
     <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-500px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
       <Webhook :isWebHookShow="isWebHookShow" :colName="name" class="mt-2"/>
-<!--      <DocumentEditor :document="selectingDoc"/>-->
     </div>
     <div v-else></div>
   </div>
@@ -54,6 +55,7 @@ import {flatten, uniq} from 'lodash-es';
 import {ref, reactive, onMounted, watch, inject, computed} from 'vue';
 import Webhook from '@/components/Webhook.vue'
 import DocumentEditor from "@/components/DocumentEditor.vue";
+import DialogDocCreate from "@/components/DialogDocCreate.vue"
 import {colAPI} from "@/api"
 
 const props = defineProps({
@@ -61,7 +63,7 @@ const props = defineProps({
   dbId: String
 })
 
-const {loading} = inject('TSystem');
+const {loading, msgBox, dialog} = inject('TSystem');
 const paging = reactive({
   page: 1,
   itemsPerPage: 10,
@@ -118,8 +120,17 @@ watch(() => props.name, () => {
   countDocs()
   listDocs()
 });
+
+async function createNewDoc() {
+  const doc = await dialog.show(DialogDocCreate)
+  if (!doc) return
+  const col = props.name.toString();
+  try {
+    await colAPI.createNewDoc(props.dbId, col, doc)
+    notification.info('Successfully creating new doc')
+  } catch (error) {
+    console.error(`Error creating new document`, error);
+  }
+}
+
 </script>
-
-<style scoped>
-
-</style>

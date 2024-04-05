@@ -42,32 +42,21 @@ import {onMounted} from "vue";
 import Collection from '../components/Collection.vue'
 import DialogColCreate from "../components/DialogColCreate.vue";
 import {provide} from 'vue';
-
 const selectedSidebarItemIdx = ref(0)
-
 function selectSidebarItem(i) {
   selectedSidebarItemIdx.value = i
 }
-
 const {dialog, loading, notification} = inject('TSystem')
-
 const route = useRoute()
-
 const nav = useNavigation()
-
 const rs = ref([])
-
 const dbId = route.params.id
-
 provide('dbId', route.params.id)
 const cols = ref([])
-
 onMounted(getCols);
-
 async function getCols() {
   cols.value = await dbAPI.getDbCollection(route.params.id);
 }
-
 const sidebarItems = computed(() => {
   if (cols.value?.length > 0) {
     return cols.value.map((col) => ({
@@ -80,7 +69,6 @@ const sidebarItems = computed(() => {
     return null
   }
 })
-
 async function showCreateColDialog() {
   const colName = await dialog.show(DialogColCreate)
   if (!colName) return

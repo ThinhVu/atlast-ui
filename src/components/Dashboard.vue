@@ -17,9 +17,7 @@ import Database from "@/components/Database.vue";
 import Billing from "@/components/Billing.vue";
 import Setting from "@/components/Setting.vue";
 import {useNavigation} from '@/composables/useNavigation'
-
 const nav = useNavigation()
-
 const sidebarItems = computed(() => {
   return [
     {title: 'Database', icon: 'fas fa-database@16px:#aaa', component: Database},
@@ -27,7 +25,6 @@ const sidebarItems = computed(() => {
     {title: 'Setting', icon: 'fas fa-cog@16px:#aaa', component: Setting},
   ]
 })
-
 const signOut = async() => {
   await userAPI.signOut();
   await nav.gotoHome()
