@@ -18,7 +18,7 @@
         <TTable v-if="documents?.length">
           <thead>
           <tr>
-            <td v-for="field in fields" :key="field">{{field}}</td>
+            <td v-for="field in fields" :key="field">{{field==='_id' ? null : field}}</td>
           </tr>
           </thead>
           <tbody>
@@ -43,7 +43,7 @@
 
     <!-- Editor -->
     <div v-if="showEditor" class="abs top-0 right-0 w-400px h-100" style="border-left: 1px solid #ccc">
-      <DocumentEditor :document="selectingDoc" @close="closeDocEdit()"/>
+      <DocumentEditor :document="selectingDoc" @close="closeDocEdit()" @save="updateDoc" @delete="deleteDoc()"/>
     </div>
     <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-500px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
       <Webhook :isWebHookShow="isWebHookShow" :colName="name" class="mt-2"/>
@@ -125,14 +125,42 @@ watch(() => props.name, () => {
 async function createNewDoc() {
   const doc = await dialog.show(DialogDocCreate)
   if (!doc) return
-  const col = props.name.toString();
   try {
-    await colAPI.createNewDoc(props.dbId, col, doc);
+    await colAPI.createNewDoc(props.dbId, props.name, doc);
     setTimeout(listDocs,500);
     setTimeout(countDocs, 500);
     notification.info('Successfully creating new doc')
   } catch (error) {
     console.error(`Error creating new document`, error);
+  }
+}
+
+const updateDoc = async (inputData) => {
+  if (!inputData) return
+  try {
+    await colAPI.updateDoc(props.dbId, props.name, selectingDoc.value._id, inputData)
+    showEditor.value = false;
+    setTimeout(listDocs,500);
+    setTimeout(countDocs, 500);
+    notification.info('Successfully updating document')
+  } catch (error) {
+    console.error(`Error in updating document`, error);
+  }
+}
+
+async function deleteDoc() {
+  const rs = await msgBox.show(
+    'Delete Document Confirm',
+    'Are you sure you want to delete this document?',
+    msgBox.Buttons.YesNo,
+    msgBox.Icons.Question
+  )
+  if (rs === msgBox.Results.yes) {
+    await colAPI.deleteDoc(props.dbId, props.name, selectingDoc.value._id)
+    showEditor.value = false;
+    setTimeout(listDocs,500);
+    setTimeout(countDocs, 500);
+    notification.info('Successfully deleting document')
   }
 }
 

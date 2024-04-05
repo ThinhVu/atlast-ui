@@ -38,7 +38,6 @@ function connect(db) {
 }
 
 async function explore(db) {
-  //notification.info('Not implement yet!')
   try {
     await nav.gotoExplore(db._id)
   } catch(e) {
