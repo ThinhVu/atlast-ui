@@ -1,6 +1,7 @@
 <template>
-  <div class="fr ai-c jc-sb px-2 py-2" style="border-bottom: 1px solid #ccc">
+  <div class="fr ai-c fg-8px px-2 py-2" style="border-bottom: 1px solid #ccc">
     <span style="text-transform: uppercase">{{name}}</span>
+    <div class="f1"></div>
     <t-btn @click="showWebhook">
       <t-icon>fas fa-link@16px</t-icon>
     </t-btn>
