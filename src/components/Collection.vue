@@ -8,6 +8,9 @@
     <t-btn @click="showWebhook">
       <t-icon>fas fa-link@16px</t-icon>
     </t-btn>
+    <t-btn @click="deleteCol">
+      <t-icon>fas fa-trash-alt@16px</t-icon>
+    </t-btn>
   </div>
   <div class="fr w-100 h-100 rel">
     <div class="f1 fc fg-8px">
@@ -18,7 +21,7 @@
         <TTable v-if="documents?.length">
           <thead>
           <tr>
-            <td v-for="field in fields" :key="field">{{field==='_id' ? null : field}}</td>
+            <td v-for="field in fields" :key="field">{{field}}</td>
           </tr>
           </thead>
           <tbody>
@@ -58,11 +61,14 @@ import Webhook from '@/components/Webhook.vue'
 import DocumentEditor from "@/components/DocumentEditor.vue";
 import DialogDocCreate from "@/components/DialogDocCreate.vue"
 import {colAPI} from "@/api"
+import {dbAPI} from "@/api"
 
 const props = defineProps({
   name: String,
   dbId: String
 })
+
+const emit = defineEmits(['deleteCol'])
 
 const {loading, msgBox, dialog, notification} = inject('TSystem');
 const paging = reactive({
@@ -158,9 +164,32 @@ async function deleteDoc() {
   if (rs === msgBox.Results.yes) {
     await colAPI.deleteDoc(props.dbId, props.name, selectingDoc.value._id)
     showEditor.value = false;
-    setTimeout(listDocs,500);
+    setTimeout(listDocs, 500);
     setTimeout(countDocs, 500);
     notification.info('Successfully deleting document')
+  }
+}
+
+async function deleteCol() {
+  const rs = await msgBox.show(
+    'Delete Collection Confirm',
+    `Are you sure you want to delete collection: ${props.name}?`,
+    msgBox.Buttons.YesNo,
+    msgBox.Icons.Question
+  )
+  if (rs === msgBox.Results.yes) {
+    const ok = await dbAPI.deleteCollection(props.dbId, props.name)
+    if(ok===false) {
+      await msgBox.show(
+        'Warning',
+        `Please delete all webhooks related to this collection first!`,
+        msgBox.Buttons.OK,
+        msgBox.Icons.Warning
+      )
+    } else {
+      notification.info('Successfully deleting document')
+    }
+    emit('deleteCol', ok)
   }
 }
 
