@@ -75,8 +75,10 @@ export const paymentAPI = {
 export const webhookAPI = {
   listDbWebHook: async(dbId, colName) => exec(axios.get(`${API_URL}/db-webhook/${dbId}/${colName}`, axiosOpts)),
   createDbWebHook: async(dbId, colName, to) => exec(axios.post(`${API_URL}/db-webhook/${dbId}/${colName}`, {to}, axiosOpts)),
-  updateDbWebHook: async(dbId, colName, id, to) => exec(axios.post(`${API_URL}/db-webhook/${dbId}/${colName}/${id}`, {to}, axiosOpts)),
+  updateDbWebHook: async(dbId, colName, id, to) => exec(axios.put(`${API_URL}/db-webhook/${dbId}/${colName}/${id}`, {to: to}, axiosOpts)),
   deleteDbWebHook: async(id) => exec(axios.delete(`${API_URL}/db-webhook/${id}`, axiosOpts)),
+  enableWebHook: async (id) => exec(axios.put(`${API_URL}/db-webhook/${id}`, {enable: true} ,axiosOpts)),
+  disableWebHook: async (id) => exec(axios.put(`${API_URL}/db-webhook/${id}`, {enable: false} ,axiosOpts)),
 }
 
 
@@ -84,6 +86,6 @@ export const colAPI = {
   countDocs: async (dbId, col) => exec(axios.get(`${API_URL}/user-collection/${dbId}/${col}`, axiosOpts)),
   getDocs: async(dbId, col, page) => exec(axios.get(`${API_URL}/user-collection/${dbId}/${col}/${page}`, axiosOpts)),
   createNewDoc: async(dbId, col, doc) => exec(axios.post(`${API_URL}/user-collection/${dbId}/${col}`, {doc}, axiosOpts)),
-  updateDoc: async(dbId, col, id, doc) => exec(axios.post(`${API_URL}/user-collection/${dbId}/${col}/${id}`, doc, axiosOpts)),
+  updateDoc: async(dbId, col, id, doc) => exec(axios.put(`${API_URL}/user-collection/${dbId}/${col}/${id}`, doc, axiosOpts)),
   deleteDoc: async(dbId, col, id) => exec(axios.delete(`${API_URL}/user-collection/${dbId}/${col}/${id}`, axiosOpts)),
 }

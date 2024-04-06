@@ -2,7 +2,6 @@
   <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left">
     <div class="fr mt-2 mb-2 ai-c jc-sb">
       <p class="mr-10 as-fs fs-20px fw-7">Web Hook</p>
-<!--      <i class="fas fa-plus-circle round fs-25px as-fe" @click="showCreateWebHookDialog()"></i>-->
       <t-btn @click="showCreateWebHookDialog()" primary>Add</t-btn>
 
     </div>
@@ -12,6 +11,7 @@
         <th class="z-index-1">Collection</th>
         <th class="z-index-1">Webhook URL</th>
         <th class="w-10px z-index-1">Action</th>
+        <th class="z-index-1">Enable</th>
       </tr>
       </thead>
       <tbody>
@@ -30,6 +30,9 @@
             </t-btn>
           </div>
         </td>
+        <td>
+            <t-switch v-model="wh.enable" @update:modelValue="(enable)=>enable===true? enableWebHook(wh): disableWebHook(wh)"></t-switch>
+        </td>
       </tr>
       </tbody>
     </t-table>
@@ -41,6 +44,7 @@ import {ref, onMounted, inject} from 'vue';
 import DialogWebhookCreate from "@/components/DialogWebhookCreate.vue";
 import DialogWebhookUpdate from "@/components/DialogWebHookUpdate.vue"
 
+
 const {msgBox, dialog, notification} = inject('TSystem')
 
 const props = defineProps({
@@ -49,16 +53,17 @@ const props = defineProps({
 })
 
 
-const emitClose = defineEmits(['close']);
-
-const closeWebhook = () => {
-  emitClose('close');
-};
+// const emitClose = defineEmits(['close']);
+//
+// const closeWebhook = () => {
+//   emitClose('close');
+// };
 
 const colName = props.colName
 
 const dbId = inject('dbId')
 
+const enable = ref(true)
 
 const webhooks = ref([])
 
@@ -105,8 +110,29 @@ async function deleteWebhookConfirm(wh) {
     }
 }
 
+async function enableWebHook(wh) {
+  await webhookAPI.enableWebHook(wh._id);
+}
 
-console.log(`colName: ${props.colName}`)
+async function disableWebHook(wh) {
+  await webhookAPI.disableWebHook(wh._id);
+}
+
+
+// const changeEnable = async (enable, wh) => {
+//   if (enable === false) {
+//     await enableWebHook(wh);
+//   } else {
+//     await disableWebHook(wh)
+//   }
+// }
+// async function changeEnable(wh) {
+//   if (wh.enable === false) {
+//     await webhookAPI.enableWebHook(wh._id);
+//   } else {
+//     await webhookAPI.disableWebHook(wh._id)
+//   }
+// }
 </script>
 
 <style>
