@@ -48,7 +48,7 @@
     <div v-if="showEditor" class="abs top-0 right-0 w-400px h-100" style="border-left: 1px solid #ccc">
       <DocumentEditor :document="selectingDoc" @close="closeDocEdit()" @save="updateDoc" @delete="deleteDoc()"/>
     </div>
-    <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-500px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
+    <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-700px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
       <Webhook :isWebHookShow="isWebHookShow" :colName="name" class="mt-2"/>
     </div>
     <div v-else></div>

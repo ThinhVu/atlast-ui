@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isWebHookShow" class="sidebar transition-element move-right-to-left">
+  <div v-if="isWebHookShow" class="sidebar transition-element">
     <div class="fr mt-2 mb-2 ai-c jc-sb">
       <p class="mr-10 as-fs fs-20px fw-7">Web Hook</p>
       <t-btn @click="showCreateWebHookDialog()" primary>Add</t-btn>
@@ -23,10 +23,10 @@
         <td>
           <div class="fr ai-c fg-4px">
             <t-btn save class="fn-btn" @click="showUpdateWebHookDialog(wh)">
-              Modify
+              Update
             </t-btn>
             <t-btn delete class="fn-btn" @click="deleteWebhookConfirm(wh)">
-              Remove
+              <t-icon>fas fa-trash-alt@16px:#fff</t-icon>
             </t-btn>
           </div>
         </td>
@@ -118,26 +118,11 @@ async function disableWebHook(wh) {
   await webhookAPI.disableWebHook(wh._id);
 }
 
-
-// const changeEnable = async (enable, wh) => {
-//   if (enable === false) {
-//     await enableWebHook(wh);
-//   } else {
-//     await disableWebHook(wh)
-//   }
-// }
-// async function changeEnable(wh) {
-//   if (wh.enable === false) {
-//     await webhookAPI.enableWebHook(wh._id);
-//   } else {
-//     await webhookAPI.disableWebHook(wh._id)
-//   }
-// }
 </script>
 
 <style>
 .sidebar {
-    width: 400px;
+    width: 660px;
 }
 .round {
     color: #007bff;
