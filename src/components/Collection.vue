@@ -88,7 +88,7 @@ const props = defineProps({
   dbId: String
 })
 
-const emit = defineEmits(['deleteColl'])
+const emit = defineEmits(['collDeleted'])
 
 const {loading, msgBox, notification} = inject('TSystem');
 const paging = reactive({
@@ -206,6 +206,7 @@ async function deleteColl() {
     const ok = await dbAPI.deleteCollection(props.dbId, props.name)
     if (ok) {
       notification.info('Successfully deleting document')
+      emit('collDeleted')
     } else {
       await msgBox.show(
         'Warning',
@@ -214,7 +215,6 @@ async function deleteColl() {
         msgBox.Icons.Warning
       )
     }
-    emit('deleteColl', ok)
   }
 }
 

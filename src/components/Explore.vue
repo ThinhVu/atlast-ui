@@ -33,7 +33,7 @@
             <Collection
               :db-id="dbId"
               :name="sidebarItems.value[selectedSidebarItemIdx].title"
-              @deleteCol="deleteCol"/>
+              @collDeleted="collDeleted"/>
           </div>
         </div>
       </t-page-content>
@@ -59,7 +59,7 @@ const nav = useNavigation()
 const rs = ref([])
 const selectedSidebarItemIdx = ref(0)
 
-const dbId = route.params.id
+const dbId = route.params.id as string
 provide('dbId', route.params.id)
 
 const searchColl = ref('')
@@ -92,10 +92,8 @@ async function showCreateColDialog() {
   }
 }
 
-const deleteCol = async(ok) => {
-  if (ok!==false) {
-    setTimeout(getCols, 500);
-    selectedSidebarItemIdx.value = 0
-  }
+function collDeleted() {
+  setTimeout(getCols, 500);
+  selectedSidebarItemIdx.value = 0
 }
 </script>

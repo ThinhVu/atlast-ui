@@ -1,9 +1,11 @@
 <script setup>
-import {ref} from 'vue';
+import {ref, computed} from 'vue';
 import MonacoEditor from "@/components/MonacoEditor.vue";
 
 const props = defineProps({document: Object})
 const emit = defineEmits(['close', 'save', 'delete'])
+
+const isInEditMode = computed(() => !!props.document?._id)
 
 const codeEditorEl = ref()
 
@@ -31,12 +33,12 @@ function saveDoc() {
       ref="codeEditorEl"/>
 
     <div class="fr ai-c jc-fe fg-8px mt-2">
-      <TBtn delete @click="deleteDoc">
+      <TBtn v-if="isInEditMode" delete @click="deleteDoc">
         <t-icon>fas fa-trash-alt@16px:#fff</t-icon>
       </TBtn>
       <TSpacer/>
       <TBtn @click="closeDocEdit">Cancel</TBtn>
-      <TBtn save @click="saveDoc">{{document?._id ? 'Save': 'Create'}}</TBtn>
+      <TBtn save @click="saveDoc">{{isInEditMode ? 'Save': 'Create'}}</TBtn>
     </div>
   </div>
 </template>
