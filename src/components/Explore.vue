@@ -25,7 +25,7 @@
               <span class="ml-2">{{ item.title }}</span>
             </div>
             <t-spacer/>
-            <t-btn @click="userAPI.signOut()">Sign out</t-btn>
+            <t-btn @click="goBack">Back</t-btn>
           </div>
 
           <!-- coll details -->
@@ -61,6 +61,10 @@ const selectedSidebarItemIdx = ref(0)
 
 const dbId = route.params.id as string
 provide('dbId', route.params.id)
+
+function goBack() {
+  nav.gotoDashboard()
+}
 
 const searchColl = ref('')
 const cols = ref([])
