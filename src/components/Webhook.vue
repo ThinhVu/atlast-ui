@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isWebHookShow" class="sidebar transition-element">
+  <div class="sidebar transition-element">
     <div class="fr mt-2 mb-2 ai-c jc-sb">
       <p class="mr-10 as-fs fs-20px fw-7">Web Hook</p>
       <t-btn @click="showCreateWebHookDialog()" primary>Add</t-btn>
@@ -48,16 +48,8 @@ import DialogWebhookUpdate from "@/components/DialogWebHookUpdate.vue"
 const {msgBox, dialog, notification} = inject('TSystem')
 
 const props = defineProps({
- isWebHookShow: Boolean,
  colName: String,
 })
-
-
-// const emitClose = defineEmits(['close']);
-//
-// const closeWebhook = () => {
-//   emitClose('close');
-// };
 
 const colName = props.colName
 

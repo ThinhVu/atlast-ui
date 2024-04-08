@@ -1,33 +1,40 @@
 <template>
+  <!-- toolbar -->
   <div class="fr ai-c fg-8px px-2 py-2" style="border-bottom: 1px solid #ccc">
     <span style="text-transform: uppercase">{{ name }}</span>
     <div class="f1"></div>
-    <t-btn @click="createNewDoc">
-      <t-icon>fas fa-plus@16px</t-icon>
-    </t-btn>
-    <t-btn @click="showWebhook">
-      <t-icon>fas fa-link@16px</t-icon>
-    </t-btn>
-    <t-btn>
-      <t-icon @click="showFilterBar">fas fa-filter@16px</t-icon>
-    </t-btn>
-    <t-btn @click="deleteCol">
-      <t-icon>fas fa-trash-alt@16px</t-icon>
-    </t-btn>
+    <TBtn @click="setSelectingDoc({})">
+      <TIcon>fas fa-plus@16px</TIcon>
+    </TBtn>
+    <TBtn @click="showWebhook">
+      <TIcon>fas fa-link@16px</TIcon>
+    </TBtn>
+    <TBtn @click="showFilterBar">
+      <TIcon>fas fa-filter@16px</TIcon>
+    </TBtn>
+    <TBtn @click="deleteColl">
+      <TIcon>fas fa-trash-alt@16px</TIcon>
+    </TBtn>
   </div>
-  <div class="fr w-100 h-100 rel">
-    <div class="f1 fc fg-8px">
+
+  <!-- content -->
+  <div class="fr w-100 h-100 bc:#eee">
+    <!-- Data -->
+    <div class="f1 fc fg-4px">
       <TLoading :action="ACTIONS.listDocs">
         <template #loading>
           <TPulseBlock class="h-30px w-100vw"/>
         </template>
-        <div v-show = "showFilter===true" class ="mt-2 mb-1 fr jc-sb">
-          <t-text v-model="searchValue" placeholder="Enter filter clause" class = "w-90 h-100"/>
+
+        <!-- filter -->
+        <div v-if="showFilter" class="fr fg-4px">
+          <t-text v-model="searchValue" placeholder="Enter filter" class="f1"/>
           <t-btn delete @click="closeFilterBar">
             <t-icon>fas fa-times@16px@bc:#fff</t-icon>
           </t-btn>
         </div>
 
+        <!-- data -->
         <TTable v-if="documents?.length">
           <thead>
           <tr>
@@ -35,11 +42,6 @@
           </tr>
           </thead>
           <tbody>
-<!--          <tr v-for="doc in documents" class="clickable" @click="setSelectingDoc(doc)">-->
-<!--            <td v-for="field in fields">-->
-<!--              {{doc[field]}}-->
-<!--            </td>-->
-<!--          </tr>-->
           <tr v-for="doc in filteredDocs" class="clickable" @click="setSelectingDoc(doc)">
             <td v-for="field in fields">
               {{doc[field]}}
@@ -48,6 +50,7 @@
           </tbody>
         </TTable>
       </TLoading>
+
       <TLoading :action="ACTIONS.countDocs">
         <template #loading>
           <TPulseBlock class="h-30px w-100vw"/>
@@ -60,22 +63,24 @@
     </div>
 
     <!-- Editor -->
-    <div v-if="showEditor" class="abs top-0 right-0 w-400px h-100" style="border-left: 1px solid #ccc">
-      <DocumentEditor :document="selectingDoc" @close="closeDocEdit()" @save="updateDoc" @delete="deleteDoc()"/>
+    <div v-if="showEditor" class="w-400px h-100">
+      <DocumentEditor
+        :document="selectingDoc"
+        @delete="deleteDoc"
+        @close="closeDocEdit"
+        @save="upsertDoc"/>
     </div>
-    <div v-else-if="!showEditor&&isWebHookShow" class="abs top-0 right-0 w-700px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
-      <Webhook :isWebHookShow="isWebHookShow" :colName="name" class="mt-2"/>
+    <div v-else-if="isWebHookShow" class="w-700px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
+      <Webhook :colName="name" class="mt-2"/>
     </div>
-    <div v-else></div>
   </div>
 </template>
 <script setup>
-import {flatten, uniq} from 'lodash-es';
+import {flatten, uniq, omit} from 'lodash-es';
 import {ref, reactive, onMounted, watch, inject, computed} from 'vue';
 import Webhook from '@/components/Webhook.vue'
 import DocumentEditor from "@/components/DocumentEditor.vue";
-import DialogDocCreate from "@/components/DialogDocCreate.vue"
-import {colAPI} from "@/api"
+import {collAPI} from "@/api"
 import {dbAPI} from "@/api"
 
 const props = defineProps({
@@ -83,9 +88,9 @@ const props = defineProps({
   dbId: String
 })
 
-const emit = defineEmits(['deleteCol'])
+const emit = defineEmits(['deleteColl'])
 
-const {loading, msgBox, dialog, notification} = inject('TSystem');
+const {loading, msgBox, notification} = inject('TSystem');
 const paging = reactive({
   page: 1,
   itemsPerPage: 10,
@@ -101,26 +106,19 @@ const documents = ref([])
 const fields = computed(() => uniq(flatten(documents.value.map(Object.keys))))
 
 const isWebHookShow=ref(false)
-// const showEditor = ref(true)
 const showEditor = ref(false)
-const selectingDoc = ref()
 const searchValue = ref()
 const showFilter = ref(false)
 
-const setSelectingDoc = (doc) => {
-  selectingDoc.value = doc
-  showEditor.value = true
-}
-
 async function listDocs() {
   loading.begin(ACTIONS.listDocs)
-  documents.value = await colAPI.getDocs(props.dbId, props.name, paging.page)
+  documents.value = await collAPI.getDocs(props.dbId, props.name, paging.page)
   loading.end(ACTIONS.listDocs)
 }
 async function countDocs() {
   loading.begin(ACTIONS.countDocs)
   paging.page = 1;
-  paging.totalItems = await colAPI.countDocs(props.dbId, props.name)
+  paging.totalItems = await collAPI.countDocs(props.dbId, props.name)
   loading.end(ACTIONS.countDocs)
 }
 
@@ -139,7 +137,7 @@ function showFilterBar() {
 
 function closeFilterBar() {
   showFilter.value = false
-  searchValue.value =""
+  searchValue.value = ""
 }
 
 function showWebhook() {
@@ -151,38 +149,32 @@ function closeDocEdit() {
   showEditor.value = false;
 }
 
-onMounted(() => {
+function reloadData() {
   countDocs()
   listDocs()
-});
-
-watch(() => props.name, () => {
-  console.log('watch trigger')
-  countDocs()
-  listDocs()
-});
-
-async function createNewDoc() {
-  const doc = await dialog.show(DialogDocCreate)
-  if (!doc) return
-  try {
-    await colAPI.createNewDoc(props.dbId, props.name, doc);
-    setTimeout(listDocs,500);
-    setTimeout(countDocs, 500);
-    notification.info('Successfully creating new doc')
-  } catch (error) {
-    console.error(`Error creating new document`, error);
-  }
 }
 
-const updateDoc = async (inputData) => {
-  if (!inputData) return
+onMounted(reloadData);
+watch(() => props.name, reloadData);
+
+const selectingDoc = ref()
+function setSelectingDoc(doc) {
+  selectingDoc.value = doc
+  showEditor.value = true
+}
+
+async function upsertDoc(doc) {
+  if (!doc) return
   try {
-    await colAPI.updateDoc(props.dbId, props.name, selectingDoc.value._id, inputData)
+    if (doc._id) {
+      await collAPI.updateDoc(props.dbId, props.name, doc._id, omit(doc, ['_id']));
+      notification.info('Successfully updating document');
+    } else {
+      await collAPI.createDoc(props.dbId, props.name, doc);
+      notification.info('Successfully create document');
+    }
+    setTimeout(reloadData, 500);
     showEditor.value = false;
-    setTimeout(listDocs,500);
-    setTimeout(countDocs, 500);
-    notification.info('Successfully updating document')
   } catch (error) {
     console.error(`Error in updating document`, error);
   }
@@ -196,15 +188,14 @@ async function deleteDoc() {
     msgBox.Icons.Question
   )
   if (rs === msgBox.Results.yes) {
-    await colAPI.deleteDoc(props.dbId, props.name, selectingDoc.value._id)
+    await collAPI.deleteDoc(props.dbId, props.name, selectingDoc.value._id)
     showEditor.value = false;
-    setTimeout(listDocs, 500);
-    setTimeout(countDocs, 500);
+    setTimeout(reloadData, 500)
     notification.info('Successfully deleting document')
   }
 }
 
-async function deleteCol() {
+async function deleteColl() {
   const rs = await msgBox.show(
     'Delete Collection Confirm',
     `Are you sure you want to delete collection: ${props.name}?`,
@@ -213,17 +204,17 @@ async function deleteCol() {
   )
   if (rs === msgBox.Results.yes) {
     const ok = await dbAPI.deleteCollection(props.dbId, props.name)
-    if(ok===false) {
+    if (ok) {
+      notification.info('Successfully deleting document')
+    } else {
       await msgBox.show(
         'Warning',
         `Please delete all webhooks related to this collection first!`,
         msgBox.Buttons.OK,
         msgBox.Icons.Warning
       )
-    } else {
-      notification.info('Successfully deleting document')
     }
-    emit('deleteCol', ok)
+    emit('deleteColl', ok)
   }
 }
 

@@ -6,6 +6,7 @@
       </t-page-header>
       <t-page-content>
         <div class="fr h-100 w-100">
+          <!-- coll names -->
           <div class="w-200px fc fg-4px ovf-y-s sb-h px-1 py-1" style="border-right: 1px solid #ddd">
             <div class="fr mt-2 mb-2 ai-c jc-sb">
               <p class="fs-20px fw-15">Collections</p>
@@ -13,6 +14,9 @@
                 Add
               </t-btn>
             </div>
+
+            <TText v-model="searchColl" placeholder="search collection..."/>
+
             <div v-for="(item, i) in sidebarItems.value" :key="item.title"
                  class="fr ai-c px-2 py-1 clickable"
                  :class="selectedSidebarItemIdx === i ? 'bc:#ddd' : 'bc:white'"
@@ -23,9 +27,13 @@
             <t-spacer/>
             <t-btn @click="userAPI.signOut()">Sign out</t-btn>
           </div>
+
+          <!-- coll details -->
           <div class="f1 ovf-h">
-            <Collection :db-id="dbId" :name="sidebarItems.value[selectedSidebarItemIdx].title"
-            @deleteCol="deleteCol"/>
+            <Collection
+              :db-id="dbId"
+              :name="sidebarItems.value[selectedSidebarItemIdx].title"
+              @deleteCol="deleteCol"/>
           </div>
         </div>
       </t-page-content>
@@ -52,9 +60,9 @@ const rs = ref([])
 const selectedSidebarItemIdx = ref(0)
 
 const dbId = route.params.id
-
 provide('dbId', route.params.id)
 
+const searchColl = ref('')
 const cols = ref([])
 const sidebarItems = ref()
 onMounted(getCols);
