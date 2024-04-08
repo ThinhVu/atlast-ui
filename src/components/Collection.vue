@@ -6,21 +6,25 @@
     <TBtn @click="setSelectingDoc({})">
       <TIcon>fas fa-plus@16px</TIcon>
     </TBtn>
-    <TBtn @click="showWebhook">
-      <TIcon>fas fa-link@16px</TIcon>
-    </TBtn>
     <TBtn @click="showFilterBar">
       <TIcon>fas fa-filter@16px</TIcon>
+    </TBtn>
+    <TBtn @click="reloadData">
+      <TIcon>fas fa-refresh@16px</TIcon>
     </TBtn>
     <TBtn @click="deleteColl">
       <TIcon>fas fa-trash-alt@16px</TIcon>
     </TBtn>
+    |
+    <TBtn @click="showWebhook">
+      <TIcon>fas fa-link@16px</TIcon>
+    </TBtn>
   </div>
 
   <!-- content -->
-  <div class="fr w-100 h-100 bc:#eee">
+  <div class="fr w-100 h-100 rel">
     <!-- Data -->
-    <div class="f1 fc fg-4px">
+    <div class="f1 fc fg-4px px-2 py-2">
       <TLoading :action="ACTIONS.listDocs">
         <template #loading>
           <TPulseBlock class="h-30px w-100vw"/>
@@ -38,7 +42,7 @@
         <TTable v-if="documents?.length">
           <thead>
           <tr>
-            <td v-for="field in fields" :key="field">{{field}}</td>
+            <th v-for="field in fields" :key="field">{{field}}</th>
           </tr>
           </thead>
           <tbody>
@@ -63,15 +67,15 @@
     </div>
 
     <!-- Editor -->
-    <div v-if="showEditor" class="w-400px h-100">
+    <div v-if="showEditor" class="w-400px h-100" style="border-left: 1px solid #ccc">
       <DocumentEditor
         :document="selectingDoc"
         @delete="deleteDoc"
         @close="closeDocEdit"
         @save="upsertDoc"/>
     </div>
-    <div v-else-if="isWebHookShow" class="w-700px h-100 bc:#FFFFFF fr jc-c" style="border-left: 1px solid #ccc">
-      <Webhook :colName="name" class="mt-2"/>
+    <div v-else-if="isWebHookShow" class="abs top-0 right-0 w-700px h-100 bc:#fff" style="border-left: 1px solid #ccc">
+      <Webhook :colName="name"/>
     </div>
   </div>
 </template>

@@ -1,41 +1,44 @@
 <template>
-  <div class="sidebar transition-element">
-    <div class="fr mt-2 mb-2 ai-c jc-sb">
-      <p class="mr-10 as-fs fs-20px fw-7">Web Hook</p>
+  <div class="px-2 py-2">
+    <div class="fr mb-2 ai-c jc-sb">
+      <p class="fs-20px fw-7">Web Hook</p>
       <t-btn @click="showCreateWebHookDialog()" primary>Add</t-btn>
-
     </div>
-    <t-table class="w-100 max-h-400px">
-      <thead>
-      <tr>
-        <th class="z-index-1">Collection</th>
-        <th class="z-index-1">Webhook URL</th>
-        <th class="w-10px z-index-1">Action</th>
-        <th class="z-index-1">Enable</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="wh in webhooks" :key="wh._id">
-        <td>{{wh.colName}}</td>
-        <td>
-          {{wh.to}}
-        </td>
-        <td>
-          <div class="fr ai-c fg-4px">
-            <t-btn save class="fn-btn" @click="showUpdateWebHookDialog(wh)">
-              Update
-            </t-btn>
-            <t-btn delete class="fn-btn" @click="deleteWebhookConfirm(wh)">
-              <t-icon>fas fa-trash-alt@16px:#fff</t-icon>
-            </t-btn>
-          </div>
-        </td>
-        <td>
+
+    <TLoading :action="ACTIONS.LOAD_WEBHOOKS">
+      <template #loading>
+        Loading...
+      </template>
+      <t-table class="w-100 max-h-400px">
+        <thead>
+        <tr>
+          <th class="z-index-1">Webhook URL</th>
+          <th class="w-10px z-index-1">Action</th>
+          <th class="z-index-1">Enable</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="wh in webhooks" :key="wh._id">
+          <td>
+            {{wh.to}}
+          </td>
+          <td>
+            <div class="fr ai-c fg-4px">
+              <t-btn save class="fn-btn" @click="showUpdateWebHookDialog(wh)">
+                Update
+              </t-btn>
+              <t-btn delete class="fn-btn" @click="deleteWebhookConfirm(wh)">
+                <t-icon>fas fa-trash-alt@16px:#fff</t-icon>
+              </t-btn>
+            </div>
+          </td>
+          <td>
             <t-switch v-model="wh.enable" @update:modelValue="(enable)=>enable===true? enableWebHook(wh): disableWebHook(wh)"></t-switch>
-        </td>
-      </tr>
-      </tbody>
-    </t-table>
+          </td>
+        </tr>
+        </tbody>
+      </t-table>
+    </TLoading>
   </div>
 </template>
 <script setup>
@@ -45,11 +48,15 @@ import DialogWebhookCreate from "@/components/DialogWebhookCreate.vue";
 import DialogWebhookUpdate from "@/components/DialogWebHookUpdate.vue"
 
 
-const {msgBox, dialog, notification} = inject('TSystem')
+const {msgBox, dialog, notification, loading} = inject('TSystem')
 
 const props = defineProps({
  colName: String,
 })
+
+const ACTIONS = {
+  LOAD_WEBHOOKS: 'lwh'
+}
 
 const colName = props.colName
 
@@ -61,7 +68,9 @@ const webhooks = ref([])
 
 onMounted(getWebHooks)
 async function getWebHooks() {
+  loading.begin(ACTIONS.LOAD_WEBHOOKS)
   webhooks.value = await webhookAPI.listDbWebHook(dbId, colName)
+  loading.end(ACTIONS.LOAD_WEBHOOKS)
 }
 
 async function showCreateWebHookDialog() {
@@ -111,21 +120,3 @@ async function disableWebHook(wh) {
 }
 
 </script>
-
-<style>
-.sidebar {
-    width: 660px;
-}
-.round {
-    color: #007bff;
-}
-
-.round:hover {
-    color: #0056b3;
-}
-
-.transition-element {
-    transition: transform 0.5s ease;
-}
-
-</style>
