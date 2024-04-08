@@ -8,6 +8,9 @@
     <t-btn @click="showWebhook">
       <t-icon>fas fa-link@16px</t-icon>
     </t-btn>
+    <t-btn>
+      <t-icon @click="showFilterBar">fas fa-filter@16px</t-icon>
+    </t-btn>
     <t-btn @click="deleteCol">
       <t-icon>fas fa-trash-alt@16px</t-icon>
     </t-btn>
@@ -18,6 +21,13 @@
         <template #loading>
           <TPulseBlock class="h-30px w-100vw"/>
         </template>
+        <div v-show = "showFilter===true" class ="mt-2 mb-1 fr jc-sb">
+          <t-text v-model="searchValue" placeholder="Enter filter clause" class = "w-90 h-100"/>
+          <t-btn delete @click="closeFilterBar">
+            <t-icon>fas fa-times@16px@bc:#fff</t-icon>
+          </t-btn>
+        </div>
+
         <TTable v-if="documents?.length">
           <thead>
           <tr>
@@ -25,7 +35,12 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="doc in documents" class="clickable" @click="setSelectingDoc(doc)">
+<!--          <tr v-for="doc in documents" class="clickable" @click="setSelectingDoc(doc)">-->
+<!--            <td v-for="field in fields">-->
+<!--              {{doc[field]}}-->
+<!--            </td>-->
+<!--          </tr>-->
+          <tr v-for="doc in filteredDocs" class="clickable" @click="setSelectingDoc(doc)">
             <td v-for="field in fields">
               {{doc[field]}}
             </td>
@@ -89,6 +104,8 @@ const isWebHookShow=ref(false)
 // const showEditor = ref(true)
 const showEditor = ref(false)
 const selectingDoc = ref()
+const searchValue = ref()
+const showFilter = ref(false)
 
 const setSelectingDoc = (doc) => {
   selectingDoc.value = doc
@@ -107,8 +124,25 @@ async function countDocs() {
   loading.end(ACTIONS.countDocs)
 }
 
+const filteredDocs = computed(() =>
+  searchValue.value
+    ? documents.value.filter(obj => Object.values(obj).some(value => {
+        const stringValue = typeof value === 'number' ? value.toString() : value;
+        return stringValue.includes(searchValue.value);
+      }))
+    : documents.value
+)
+
+function showFilterBar() {
+  showFilter.value = true
+}
+
+function closeFilterBar() {
+  showFilter.value = false
+  searchValue.value =""
+}
+
 function showWebhook() {
-  // showEditor.value = !showEditor.value;
   showEditor.value = false;
   isWebHookShow.value = !isWebHookShow.value
 }
