@@ -8,8 +8,8 @@
     <t-btn @click="showWebhook">
       <t-icon>fas fa-link@16px</t-icon>
     </t-btn>
-    <t-btn>
-      <t-icon @click="showFilterBar">fas fa-filter@16px</t-icon>
+    <t-btn @click="showFilterBar">
+      <t-icon>fas fa-filter@16px</t-icon>
     </t-btn>
     <t-btn @click="deleteCol">
       <t-icon>fas fa-trash-alt@16px</t-icon>
@@ -22,6 +22,10 @@
           <TPulseBlock class="h-30px w-100vw"/>
         </template>
         <div v-show = "showFilter===true" class ="mt-2 mb-1 fr jc-sb">
+          <select v-model="selected">
+            <option value="">All fields</option>
+            <option v-for="field in fields" :key="field">{{field}}</option>
+          </select>
           <t-text v-model="searchValue" placeholder="Enter filter clause" class = "w-90 h-100"/>
           <t-btn delete @click="closeFilterBar">
             <t-icon>fas fa-times@16px@bc:#fff</t-icon>
@@ -106,6 +110,7 @@ const showEditor = ref(false)
 const selectingDoc = ref()
 const searchValue = ref()
 const showFilter = ref(false)
+const selected = ref('')
 
 const setSelectingDoc = (doc) => {
   selectingDoc.value = doc
@@ -124,14 +129,26 @@ async function countDocs() {
   loading.end(ACTIONS.countDocs)
 }
 
-const filteredDocs = computed(() =>
-  searchValue.value
-    ? documents.value.filter(obj => Object.values(obj).some(value => {
+const filteredDocs = computed(() => {
+  if (selected.value && searchValue.value) {
+    return documents.value.filter(obj => {
+      let valueToSearch = obj[selected.value];
+      if (typeof valueToSearch === 'number') {
+        valueToSearch = valueToSearch.toString();
+      }
+      return valueToSearch.includes(searchValue.value);
+    });
+  } else if (!selected.value && searchValue.value) {
+    return documents.value.filter(obj => {
+      return Object.values(obj).some(value => {
         const stringValue = typeof value === 'number' ? value.toString() : value;
         return stringValue.includes(searchValue.value);
-      }))
-    : documents.value
-)
+      });
+    });
+  } else {
+    return documents.value;
+  }
+})
 
 function showFilterBar() {
   showFilter.value = true
@@ -139,7 +156,7 @@ function showFilterBar() {
 
 function closeFilterBar() {
   showFilter.value = false
-  searchValue.value =""
+  searchValue.value = ""
 }
 
 function showWebhook() {
