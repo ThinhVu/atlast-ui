@@ -6,6 +6,7 @@
       </t-page-header>
       <t-page-content>
         <div class="fr h-100 w-100">
+          <!-- coll names -->
           <div class="w-200px fc fg-4px ovf-y-s sb-h px-1 py-1" style="border-right: 1px solid #ddd">
             <div class="fr mt-2 mb-2 ai-c jc-sb">
               <p class="fs-20px fw-15">Collections</p>
@@ -13,6 +14,9 @@
                 Add
               </t-btn>
             </div>
+
+            <TText v-model="searchColl" placeholder="search collection..."/>
+
             <div v-for="(item, i) in sidebarItems.value" :key="item.title"
                  class="fr ai-c px-2 py-1 clickable"
                  :class="selectedSidebarItemIdx === i ? 'bc:#ddd' : 'bc:white'"
@@ -21,11 +25,15 @@
               <span class="ml-2">{{ item.title }}</span>
             </div>
             <t-spacer/>
-            <t-btn @click="userAPI.signOut()">Sign out</t-btn>
+            <t-btn @click="goBack">Back</t-btn>
           </div>
+
+          <!-- coll details -->
           <div class="f1 ovf-h">
-            <Collection :db-id="dbId" :name="sidebarItems.value[selectedSidebarItemIdx].title"
-            @deleteCol="deleteCol"/>
+            <Collection
+              :db-id="dbId"
+              :name="sidebarItems.value[selectedSidebarItemIdx].title"
+              @collDeleted="collDeleted"/>
           </div>
         </div>
       </t-page-content>
@@ -51,10 +59,14 @@ const nav = useNavigation()
 const rs = ref([])
 const selectedSidebarItemIdx = ref(0)
 
-const dbId = route.params.id
-
+const dbId = route.params.id as string
 provide('dbId', route.params.id)
 
+function goBack() {
+  nav.gotoDashboard()
+}
+
+const searchColl = ref('')
 const cols = ref([])
 const sidebarItems = ref()
 onMounted(getCols);
@@ -84,10 +96,8 @@ async function showCreateColDialog() {
   }
 }
 
-const deleteCol = async(ok) => {
-  if (ok!==false) {
-    setTimeout(getCols, 500);
-    selectedSidebarItemIdx.value = 0
-  }
+function collDeleted() {
+  setTimeout(getCols, 500);
+  selectedSidebarItemIdx.value = 0
 }
 </script>

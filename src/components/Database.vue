@@ -1,5 +1,4 @@
 <script setup>
-import {isEmpty} from 'lodash-es';
 import dayjs from 'dayjs';
 import {dbAPI} from "@/api";
 import {ref, onMounted, inject} from "vue";
@@ -7,15 +6,21 @@ import DialogDbConnect from "@/components/DialogDbConnect.vue";
 import DialogDbCreate from "@/components/DialogDbCreate.vue"
 import {useNavigation} from "@/composables/useNavigation";
 
-const {msgBox, dialog, notification} = inject('TSystem')
+const {msgBox, dialog, notification, loading} = inject('TSystem')
 
 const databases = ref([])
 onMounted(loadDbs)
 
 const nav = useNavigation()
 
+const ACTIONS = {
+  LOAD_DBS: 'l_dbs',
+}
+
 async function loadDbs() {
+  loading.begin(ACTIONS.LOAD_DBS)
   databases.value = await dbAPI.getDbs()
+  loading.end(ACTIONS.LOAD_DBS)
 }
 
 async function showCreateDbDialog() {
@@ -66,42 +71,48 @@ async function deleteDbConfirm(db) {
     <div>
       <t-btn save @click="showCreateDbDialog">Create database</t-btn>
     </div>
-    <t-table class="w-100 max-h-400px">
-      <thead>
-      <tr>
-        <th class="z-index-1">Name</th>
-        <th class="z-index-1">Db Name</th>
-        <th class="z-index-1">Size (GB)</th>
-        <th class="z-index-1">Create At</th>
-        <th class="w-10px z-index-1">Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="db in databases" :key="db._id">
-        <td>{{db.alias}}</td>
-        <td>{{db.dbName}}</td>
-        <td>
-          {{db.sizeInGB}}
-        </td>
-        <td>
-          {{dayjs(db.createDt).format('YYYY-MM-DD HH:mm:ss')}}
-        </td>
-        <td>
-          <div class="fr ai-c fg-4px">
-            <t-btn primary class="fn-btn" @click="connect(db)">
-              Connect
-            </t-btn>
-            <t-btn secondary class="fn-btn" @click="explore(db)">
-              Explore
-            </t-btn>
-            <t-btn delete class="fn-btn" @click="deleteDbConfirm(db)">
-              Remove
-            </t-btn>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </t-table>
+
+    <TLoading :action="ACTIONS.LOAD_DBS">
+      <template #loading>
+        Loading...
+      </template>
+      <t-table class="w-100 max-h-400px">
+        <thead>
+        <tr>
+          <th class="z-index-1">Name</th>
+          <th class="z-index-1">Db Name</th>
+          <th class="z-index-1">Size (GB)</th>
+          <th class="z-index-1">Create At</th>
+          <th class="w-10px z-index-1">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="db in databases" :key="db._id">
+          <td>{{db.alias}}</td>
+          <td>{{db.dbName}}</td>
+          <td>
+            {{db.sizeInGB}}
+          </td>
+          <td>
+            {{dayjs(db.createDt).format('YYYY-MM-DD HH:mm:ss')}}
+          </td>
+          <td>
+            <div class="fr ai-c fg-4px">
+              <t-btn primary class="fn-btn" @click="connect(db)">
+                Connect
+              </t-btn>
+              <t-btn secondary class="fn-btn" @click="explore(db)">
+                Explore
+              </t-btn>
+              <t-btn delete class="fn-btn" @click="deleteDbConfirm(db)">
+                Remove
+              </t-btn>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </t-table>
+    </TLoading>
   </section>
 </template>
 
