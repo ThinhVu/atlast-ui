@@ -32,13 +32,11 @@
 
         <!-- filter -->
         <div v-if="showFilter" class="fr fg-4px">
-          <t-text v-model="searchValue" placeholder="Enter filter" class="f1"/>
-        <div v-show = "showFilter===true" class ="mt-2 mb-1 fr jc-sb">
           <select v-model="selected">
             <option value="">All fields</option>
-            <option v-for="field in fields" :key="field">{{field}}</option>
+            <option v-for="field in fields" :key="field">{{ field }}</option>
           </select>
-          <t-text v-model="searchValue" placeholder="Enter filter" class = "w-90 h-100"/>
+          <t-text v-model="searchValue" placeholder="Enter filter" class="f1"/>
           <t-btn delete @click="closeFilterBar">
             <t-icon>fas fa-times@16px@bc:#fff</t-icon>
           </t-btn>
