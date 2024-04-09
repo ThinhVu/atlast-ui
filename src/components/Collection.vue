@@ -159,6 +159,7 @@ function showFilterBar() {
 function closeFilterBar() {
   showFilter.value = false
   searchValue.value = ""
+  selected.value = ""
 }
 
 function showWebhook() {
