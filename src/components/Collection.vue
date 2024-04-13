@@ -32,6 +32,10 @@
 
         <!-- filter -->
         <div v-if="showFilter" class="fr fg-4px">
+          <select v-model="selected">
+            <option value="">All fields</option>
+            <option v-for="field in fields" :key="field">{{ field }}</option>
+          </select>
           <t-text v-model="searchValue" placeholder="Enter filter" class="f1"/>
           <t-btn delete @click="closeFilterBar">
             <t-icon>fas fa-times@16px@bc:#fff</t-icon>
@@ -113,6 +117,7 @@ const isWebHookShow=ref(false)
 const showEditor = ref(false)
 const searchValue = ref()
 const showFilter = ref(false)
+const selected = ref('')
 
 async function listDocs() {
   loading.begin(ACTIONS.listDocs)
@@ -126,14 +131,26 @@ async function countDocs() {
   loading.end(ACTIONS.countDocs)
 }
 
-const filteredDocs = computed(() =>
-  searchValue.value
-    ? documents.value.filter(obj => Object.values(obj).some(value => {
+const filteredDocs = computed(() => {
+  if (selected.value && searchValue.value) {
+    return documents.value.filter(obj => {
+      let valueToSearch = obj[selected.value];
+      if (typeof valueToSearch === 'number') {
+        valueToSearch = valueToSearch.toString();
+      }
+      return valueToSearch.includes(searchValue.value);
+    });
+  } else if (!selected.value && searchValue.value) {
+    return documents.value.filter(obj => {
+      return Object.values(obj).some(value => {
         const stringValue = typeof value === 'number' ? value.toString() : value;
         return stringValue.includes(searchValue.value);
-      }))
-    : documents.value
-)
+      });
+    });
+  } else {
+    return documents.value;
+  }
+})
 
 function showFilterBar() {
   showFilter.value = true
@@ -142,6 +159,7 @@ function showFilterBar() {
 function closeFilterBar() {
   showFilter.value = false
   searchValue.value = ""
+  selected.value = ""
 }
 
 function showWebhook() {
