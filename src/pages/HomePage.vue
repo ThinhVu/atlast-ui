@@ -84,7 +84,7 @@ const createAnAccount = () => {
   grid-template-columns: 1fr;
 }
 
-@media screen and (min-width > 600px) {
+@media screen and (min-width: 600px) {
   .benefits {
     grid-template-columns: 1fr 1fr 1fr;
   }
