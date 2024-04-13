@@ -5,7 +5,7 @@
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;"/>
         <TSpacer/>
         <TBtn @click="signIn">Sign in</TBtn>
-        <TBtn save @click="createAnAccount">Create an account</TBtn>
+        <TBtn save @click="createAnAccount">Sign up</TBtn>
       </div>
     </div>
     <section class="w-100vw fc ai-c jc-c ta-c" style="height: 60vh">
@@ -14,7 +14,7 @@
       <p>Your MongoDB Atlas Alternative for Seamless Database Hosting!</p>
     </section>
     <section class="fc ai-c jc-c" style="width: 80vw; margin: 0 auto">
-      <div class="grid gtc-1fr-1fr-1fr gg-20px fs-14px">
+      <div class="grid benefits gg-20px fs-14px">
         <div class="px-4 py-4 br-2" style="border: 1px solid #ddd">
           <h3 class="mb-3 c:#18a00c fs-20px">Affordable pricing</h3>
           <p class="mb-2">Ditch the high costs without compromising quality!</p>
@@ -80,5 +80,13 @@ const createAnAccount = () => {
 </script>
 
 <style scoped>
+.benefits {
+  grid-template-columns: 1fr;
+}
 
+@media screen and (min-width > 600px) {
+  .benefits {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
 </style>
