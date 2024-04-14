@@ -81,6 +81,9 @@ export const webhookAPI = {
   disableWebHook: async (id) => exec(axios.put(`${API_URL}/db-webhook/${id}`, {enable: false} ,axiosOpts)),
 }
 
+export const cmdExecutor = {
+  execute: async (cmd) => eval(cmd)
+}
 
 export const collAPI = {
   countDocs: async (dbId, col) => exec(axios.get(`${API_URL}/user-collection/${dbId}/${col}`, axiosOpts)),
