@@ -8,7 +8,7 @@
         <TBtn save @click="createAnAccount">Sign up</TBtn>
       </div>
     </div>
-    <section class="w-100vw fc ai-c jc-c ta-c" style="height: 60vh">
+    <section class="w-100 fc ai-c jc-c ta-c" style="height: 60vh">
       <img class="mb-4" src="@/assets/images/logo.png" alt="Atlast's logo" style="width: 200px;"/>
       <h2 class="mb-2">Unlock Simplicity, Embrace Affordability</h2>
       <p>Your MongoDB Atlas Alternative for Seamless Database Hosting!</p>
