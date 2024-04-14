@@ -22,6 +22,9 @@ async function loadDbs() {
   databases.value = await dbAPI.getDbs()
   loading.end(ACTIONS.LOAD_DBS)
 }
+function inspect(db) {
+  console.log(db)
+}
 
 async function showCreateDbDialog() {
   const alias = await dialog.show(DialogDbCreate)
@@ -80,16 +83,14 @@ async function deleteDbConfirm(db) {
         <thead>
         <tr>
           <th class="z-index-1">Name</th>
-          <th class="z-index-1">Db Name</th>
           <th class="z-index-1">Size (GB)</th>
           <th class="z-index-1">Create At</th>
           <th class="w-10px z-index-1">Action</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="db in databases" :key="db._id">
+        <tr v-for="db in databases" :key="db._id" @click="inspect(db)">
           <td>{{db.alias}}</td>
-          <td>{{db.dbName}}</td>
           <td>
             {{db.sizeInGB}}
           </td>

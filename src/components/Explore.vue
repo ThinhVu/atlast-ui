@@ -1,6 +1,6 @@
 <template>
   <template v-if="sidebarItems">
-    <div class="t-dashboard h-100vh v-100vw">
+    <div class="t-dashboard h-100vh w-100">
       <t-page-header>
         <img src="@/assets/images/logo-full.png" alt="logo-full" style="width: 120px;" @click="nav.gotoHome()"/>
       </t-page-header>
