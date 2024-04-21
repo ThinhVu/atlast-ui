@@ -75,7 +75,7 @@
   </div>
 </template>
 <script setup>
-import collQryBuilder from '@/api/db';
+import collQryBuilder from '@/api/col-qry-builder';
 import {flatten, uniq, omit} from 'lodash-es';
 import {ref, reactive, onMounted, watch, inject, computed} from 'vue';
 import Webhook from '@/components/Webhook.vue'

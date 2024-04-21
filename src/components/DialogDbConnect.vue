@@ -4,10 +4,12 @@ import {copyToClipboard} from "@/utils/common";
 import {dbAPI} from "@/api";
 import TabHeader from "@/components/TabHeader.vue";
 import {API_URL, MONGODB_HOSTS, MONGODB_REPL_NAME} from "@/constants";
+import {clusterIdMap} from "@/app-state";
 
 const props = defineProps({
   _id: String,
   dbName: String,
+  clusterId: String,
   username: String,
   password: String
 })
@@ -26,12 +28,16 @@ const tabs = [
 const tab = ref(TABS.CONN_STR)
 
 const connectionStr = computed(() => {
-  const defaultConn = `mongodb://${props.username}:${props.password}@${MONGODB_HOSTS}/${props.dbName}?authSource=${props.dbName}`
-  if (MONGODB_HOSTS === "127.0.0.1") {
+  const cluster = clusterIdMap.value[props.clusterId];
+  if (!cluster) return
+  console.log('cluster', cluster);
+  const host = cluster.nodes.join(',')
+  const defaultConn = `mongodb://${props.username}:${props.password}@${host}/${props.dbName}?authSource=${props.dbName}`
+  if (host === "127.0.0.1") {
     return defaultConn
   }
   const replicationOptions = {
-    replicaSet: MONGODB_REPL_NAME,
+    replicaSet: "rs0",
     retryWrites: true,
     w: 'majority',
     readPreference: 'nearest'

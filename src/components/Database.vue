@@ -1,15 +1,15 @@
 <script setup>
 import dayjs from 'dayjs';
-import {dbAPI} from "@/api";
-import {ref, onMounted, inject} from "vue";
-import DialogDbConnect from "@/components/DialogDbConnect.vue";
-import DialogDbCreate from "@/components/DialogDbCreate.vue"
+import {ref, onMounted, inject, computed} from "vue";
 import {useNavigation} from "@/composables/useNavigation";
+import {dbClusterAPI, dbAPI} from "@/api";
+import {sharedClusters, mineClusters, clusterIdMap} from "@/app-state";
+import DialogDbConnect from "@/components/DialogDbConnect.vue";
+import DialogDbCreate from "@/components/DialogDbCreateShared.vue"
 
 const {msgBox, dialog, notification, loading} = inject('TSystem')
 
 const databases = ref([])
-onMounted(loadDbs)
 
 const nav = useNavigation()
 
@@ -27,10 +27,11 @@ function inspect(db) {
 }
 
 async function showCreateDbDialog() {
-  const alias = await dialog.show(DialogDbCreate)
-  if (!alias) return
+  const rs = await dialog.show(DialogDbCreate)
+  if (!rs) return
   try {
-    await dbAPI.createDb(alias);
+    const {alias, cluster} = rs
+    await dbAPI.createDb(alias, cluster);
     notification.info('Successfully created new database');
     setTimeout(loadDbs, 500);
   } catch (error) {
@@ -67,6 +68,11 @@ async function deleteDbConfirm(db) {
   }
 }
 
+onMounted(async () => {
+  sharedClusters.value = (await dbClusterAPI.getSharedClusters() || [])
+  mineClusters.value = (await dbClusterAPI.getMineClusters() || [])
+  await loadDbs()
+})
 </script>
 
 <template>
@@ -82,6 +88,7 @@ async function deleteDbConfirm(db) {
       <t-table class="w-100 max-h-400px">
         <thead>
         <tr>
+          <th class="z-index-1">Cluster</th>
           <th class="z-index-1">Name</th>
           <th class="z-index-1">Size (GB)</th>
           <th class="z-index-1">Create At</th>
@@ -90,6 +97,7 @@ async function deleteDbConfirm(db) {
         </thead>
         <tbody>
         <tr v-for="db in databases" :key="db._id" @click="inspect(db)">
+          <td>{{clusterIdMap[db.clusterId].name}}</td>
           <td>{{db.alias}}</td>
           <td>
             {{db.sizeInGB}}
