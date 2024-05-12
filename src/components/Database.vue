@@ -5,7 +5,8 @@ import {useNavigation} from "@/composables/useNavigation";
 import {dbClusterAPI, dbAPI} from "@/api";
 import {sharedClusters, mineClusters, clusterIdMap} from "@/app-state";
 import DialogDbConnect from "@/components/DialogDbConnect.vue";
-import DialogDbCreate from "@/components/DialogDbCreateShared.vue"
+import DialogDbCreateSharedCluster from "@/components/DialogDbCreateSharedCluster.vue"
+import DialogDbCreatePrivateCluster from "@/components/DialogDbCreatePrivateCluster.vue"
 
 const {msgBox, dialog, notification, loading} = inject('TSystem')
 
@@ -27,7 +28,20 @@ function inspect(db) {
 }
 
 async function showCreateDbDialog() {
-  const rs = await dialog.show(DialogDbCreate)
+  const rs = await dialog.show(DialogDbCreateSharedCluster)
+  if (!rs) return
+  try {
+    const {alias, cluster} = rs
+    await dbAPI.createDb(alias, cluster);
+    notification.info('Successfully created new database');
+    setTimeout(loadDbs, 500);
+  } catch (error) {
+    console.error('Error creating new database:', error);
+  }
+}
+
+async function showCreateDbPrivateClusterDialog() {
+  const rs = await dialog.show(DialogDbCreatePrivateCluster)
   if (!rs) return
   try {
     const {alias, cluster} = rs
@@ -77,8 +91,9 @@ onMounted(async () => {
 
 <template>
   <section data-name="system-config" class="fc w-100 h-100 fg-12px px-3 py-3">
-    <div>
+    <div class="fr ai-c fg-8px">
       <t-btn save @click="showCreateDbDialog">Create database</t-btn>
+      <t-btn class="bc:#ad00f4" @click="showCreateDbPrivateClusterDialog">Create database (Private cluster)</t-btn>
     </div>
 
     <TLoading :action="ACTIONS.LOAD_DBS">

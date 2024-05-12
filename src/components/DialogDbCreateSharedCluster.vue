@@ -25,13 +25,17 @@ const emit = defineEmits(['close'])
 
 const {notification} = inject('TSystem')
 
-const cluster = ref(sharedClusters.value && sharedClusters.value[0]._id)
+const cluster = ref(sharedClusters.value && sharedClusters.value[0] && sharedClusters.value[0]._id)
 const name = ref('')
 
 const createDb = () => {
   const alias = trim(name.value)
   if (isEmpty(alias)) {
     notification.err('db name is empty')
+    return
+  }
+  if (isEmpty(cluster.value)) {
+    notification.err('You must select cluster')
     return
   }
   emit('close', {

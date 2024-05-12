@@ -23,7 +23,7 @@ const TABS = {
 }
 const tabs = [
   {text: 'Connection string', value: TABS.CONN_STR},
-  {text: 'API Key', value: TABS.API_KEY}
+  // {text: 'API Key', value: TABS.API_KEY}
 ]
 const tab = ref(TABS.CONN_STR)
 

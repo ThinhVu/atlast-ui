@@ -71,10 +71,8 @@ export const dbAPI = {
 
 export const paymentAPI = {
   getCurrentBalance: async() => exec(axios.get(`${API_URL}/payment`, axiosOpts)),
-  depositMoney: async (amount) => exec(axios.post(`${API_URL}/payment/deposit`, {amount}, axiosOpts)),
-  updateBalance: async (amount) => exec(axios.post(`${API_URL}/payment`, {amount}, axiosOpts)),
   getPaymentHistory: async () => exec(axios.get(`${API_URL}/payment/history`, axiosOpts)),
-  updatePaymentHistory: async (value) => exec(axios.post(`${API_URL}/payment/history`, {value}, axiosOpts)),
+  pay: async (details) => exec(axios.post(`${API_URL}/payment/pay`, details, axiosOpts)),
 }
 
 export const webhookAPI = {
