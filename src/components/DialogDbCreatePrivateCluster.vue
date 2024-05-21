@@ -21,7 +21,7 @@
       </div>
       <div class="px-3 py-1 fr ai-c jc-fe fg-4px">
         <TBtn @click="emit('close')">Cancel</TBtn>
-        <TBtn @click="createPrivateCluster" save>Create private cluster</TBtn>
+        <TBtn @click="createPrivateCluster" save>Order private cluster</TBtn>
       </div>
     </template>
   </div>

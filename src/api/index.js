@@ -97,3 +97,10 @@ export const supportAPI = {
   sendMessage: async () => {},
   loadMessages: async () => {}
 }
+
+export const orderAPI = {
+  createOrder: async (order) => exec(axios.post(`${API_URL}/order`, order, axiosOpts)),
+  getOrders: async () => exec(axios.get(`${API_URL}/order`, axiosOpts)),
+  getOrder: async (orderId) => exec(axios.get(`${API_URL}/order/${orderId}`, axiosOpts)),
+  cancelOrder: async (orderId) => exec(axios.put(`${API_URL}/order/${orderId}/cancel`, {}, axiosOpts)),
+}
