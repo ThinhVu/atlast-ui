@@ -38,7 +38,8 @@ const signIn = async () => {
     await nav.gotoDashboard()
     emit('close')
   } catch (e) {
-    notification.err(e)
+    const errMsg = e?.response?.data?.error || e?.message || e
+    notification.err(errMsg)
   }
 }
 
